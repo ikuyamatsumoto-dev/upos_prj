@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FC加盟店教育コスト削減｜AI活用 改訂版レポート</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Noto+Sans+JP:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1814;
+    --paper: #f7f4ef;
+    --accent: #c84b2f;
+    --accent-light: #f0e8e4;
+    --muted: #7a7570;
+    --border: #ddd8d0;
+    --step-a: #2c5f4a;
+    --step-b: #1e3a5f;
+    --warning: #8a6a00;
+    --warning-bg: #fdf6e3;
+    --verified: #1e5f3a;
+    --unverified: #8a3a00;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  /* ── HEADER ── */
+  header {
+    border-bottom: 3px solid var(--ink);
+    padding: 60px 0 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--accent);
+  }
+  .header-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  header h1 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(24px, 4vw, 40px);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+    max-width: 720px;
+    margin: 0 auto 16px;
+  }
+  header .subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+  .version-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 3px 10px;
+    margin-top: 16px;
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  section {
+    padding: 60px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  section:last-child { border-bottom: none; }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  h2 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 700;
+    margin-bottom: 24px;
+    line-height: 1.4;
+  }
+
+  h3 {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+
+  p {
+    font-size: 15px;
+    margin-bottom: 16px;
+    color: #3a3630;
+  }
+
+  a {
+    color: var(--step-b);
+    text-decoration: underline;
+    font-size: inherit;
+  }
+  a:hover { color: var(--accent); }
+
+  /* ── CRITICAL NOTE ── */
+  .critical-note {
+    background: var(--warning-bg);
+    border: 1px solid #e6c84a;
+    border-left: 4px solid var(--warning);
+    padding: 20px 24px;
+    margin: 24px 0;
+    font-size: 14px;
+    color: #5a4400;
+  }
+  .critical-note strong { color: var(--warning); }
+
+  /* ── HYPOTHESIS BLOCK ── */
+  .hypothesis {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 40px 48px;
+    margin: 32px 0;
+    position: relative;
+  }
+  .hypothesis::before {
+    content: '"';
+    font-family: 'Noto Serif JP', serif;
+    font-size: 120px;
+    color: var(--accent);
+    opacity: 0.3;
+    position: absolute;
+    top: -20px;
+    left: 32px;
+    line-height: 1;
+  }
+  .hypothesis p {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(16px, 2.5vw, 20px);
+    color: var(--paper);
+    position: relative;
+    z-index: 1;
+    line-height: 1.7;
+    margin: 0;
+  }
+  .hypothesis strong { color: #f0a080; }
+
+  /* ── RIVAL HYPOTHESES ── */
+  .rival-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+  }
+  @media (max-width: 600px) { .rival-grid { grid-template-columns: 1fr; } }
+
+  .rival-card {
+    border: 1px solid var(--border);
+    padding: 20px;
+    position: relative;
+  }
+  .rival-card .rival-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .rival-card.rejected .rival-label { color: #999; }
+  .rival-card.adopted .rival-label { color: var(--step-a); }
+  .rival-card h4 { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+  .rival-card p { font-size: 13px; color: var(--muted); margin: 0; }
+  .rival-status {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    display: inline-block;
+    padding: 2px 8px;
+    margin-top: 10px;
+  }
+  .rival-card.rejected .rival-status { background: #f0f0f0; color: #888; }
+  .rival-card.adopted .rival-status { background: var(--step-a); color: white; }
+
+  /* ── FLOW ── */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 32px 0;
+  }
+  .flow-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px 0;
+    border-left: 2px solid var(--border);
+    padding-left: 28px;
+    position: relative;
+  }
+  .flow-item::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    position: absolute;
+    left: -6px;
+    top: 26px;
+  }
+  .flow-item:last-child { border-left: 2px solid transparent; }
+  .flow-text { font-size: 15px; color: #3a3630; padding-top: 2px; }
+
+  /* ── STEPS ── */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 32px 0;
+  }
+  @media (max-width: 600px) { .steps-grid { grid-template-columns: 1fr; } }
+
+  .step-card {
+    padding: 28px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .step-card.a { background: var(--step-a); color: white; }
+  .step-card.b { background: var(--step-b); color: white; }
+  .step-card .step-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 64px;
+    font-weight: 500;
+    opacity: 0.15;
+    position: absolute;
+    right: 16px;
+    top: 8px;
+    line-height: 1;
+  }
+  .step-card h3 { color: white; font-size: 13px; letter-spacing: 0.1em; margin-bottom: 8px; opacity: 0.7; text-transform: uppercase; }
+  .step-card p { color: rgba(255,255,255,0.9); font-size: 17px; font-family: 'Noto Serif JP', serif; margin: 0; }
+
+  /* ── CASE STUDY CARDS ── */
+  .cases { display: flex; flex-direction: column; gap: 32px; margin: 32px 0; }
+
+  .case-card {
+    border: 1px solid var(--border);
+    padding: 32px;
+    position: relative;
+  }
+  .case-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+  }
+  .case-card.step-a::before { background: var(--step-a); }
+  .case-card.step-b::before { background: var(--step-b); }
+
+  .case-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .case-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    display: inline-block;
+  }
+  .case-card.step-a .case-tag { background: var(--step-a); color: white; }
+  .case-card.step-b .case-tag { background: var(--step-b); color: white; }
+
+  .reliability-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+  .reliability-badge.verified { color: var(--verified); border-color: var(--verified); }
+  .reliability-badge.partial { color: var(--warning); border-color: var(--warning); }
+
+  .case-card h3 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .metrics-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+  .metric-box {
+    background: var(--ink);
+    color: white;
+    padding: 12px 16px;
+    text-align: center;
+    min-width: 100px;
+  }
+  .metric-box .metric-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 24px;
+    font-weight: 500;
+    color: #f0a080;
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .metric-box .metric-label {
+    font-size: 11px;
+    opacity: 0.7;
+    line-height: 1.3;
+  }
+
+  .result-box {
+    background: var(--accent-light);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .fc-translation {
+    background: #eef4f8;
+    border-left: 3px solid var(--step-b);
+    padding: 12px 16px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #2a3a4a;
+  }
+  .fc-translation strong { color: var(--step-b); }
+
+  .source-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    margin-top: 12px;
+    color: var(--muted);
+  }
+  .source-link a { font-size: 11px; }
+
+  /* ── OBSTACLE TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 14px;
+  }
+  th {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 400;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
+  td:first-child { color: var(--muted); font-size: 13px; }
+
+  /* ── ROADMAP ── */
+  .roadmap {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 32px 0;
+  }
+  .roadmap-item {
+    display: flex;
+    gap: 24px;
+    padding-bottom: 32px;
+    position: relative;
+  }
+  .roadmap-item::after {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 40px;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+  .roadmap-item:last-child::after { display: none; }
+  .roadmap-num {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .roadmap-content h3 {
+    font-size: 15px;
+    font-weight: 500;
+    padding-top: 8px;
+    margin-bottom: 6px;
+  }
+  .roadmap-content p {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+  }
+  .roadmap-obstacle {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--warning);
+    font-family: 'DM Mono', monospace;
+    background: var(--warning-bg);
+    padding: 6px 10px;
+    border-left: 2px solid var(--warning);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 40px 32px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-in { animation: fadeUp 0.6s ease forwards; opacity: 0; }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="header-label fade-in">FC本部 × AI活用 調査レポート</div>
+    <h1 class="fade-in delay-1">加盟店教育コストの<br>ボトルネックと解決事例</h1>
+    <div class="subtitle fade-in delay-2">課題考察 → 競合仮説の検討 → 他業界事例（数値付き）→ FC転用ロードマップ</div>
+    <div class="version-badge fade-in delay-3">Ver.2 — クリティカルシンキング改訂版</div>
+  </div>
+</header>
+
+<!-- PREMISE & COST DATA -->
+<section>
+  <div class="container">
+    <div class="section-label">前提データ</div>
+    <h2>FCの教育コストはどのくらいか</h2>
+    <p>経済産業省「フランチャイズチェーン事業経営実態調査」によると、店舗型フランチャイズの加盟金（初期教育・研修費を含む）の平均は<strong>約197万円</strong>。これは開業時のみのコストであり、その後もSVによる定期巡回・電話対応・集合研修が継続的に発生する。</p>
+
+    <div class="critical-note">
+      <strong>⚠ 前提として確認すべきこと</strong><br>
+      「教育コストが高い」という課題認識が正しいとしても、その<strong>本当の原因</strong>によって打ち手は変わる。AIを入れる前に、どのボトルネックが最も大きいかを特定する必要がある。
+    </div>
+  </div>
+</section>
+
+<!-- RIVAL HYPOTHESES -->
+<section>
+  <div class="container">
+    <div class="section-label">競合仮説の整理</div>
+    <h2>「なぜ教育コストが下がらないのか」を4つの仮説で考える</h2>
+    <p>原因をひとつに絞る前に、考えられる仮説をすべて並べて検討する。</p>
+
+    <div class="rival-grid">
+      <div class="rival-card rejected">
+        <div class="rival-label">仮説 B</div>
+        <h4>加盟店の学ぶ意欲が低い</h4>
+        <p>マニュアルはあるが読まれない。モチベーション問題。→ AIで解くより先にインセンティブ設計が必要。</p>
+        <span class="rival-status">今回は主因から除外</span>
+      </div>
+      <div class="rival-card rejected">
+        <div class="rival-label">仮説 C</div>
+        <h4>SVの絶対数が足りない</h4>
+        <p>人的リソースの問題。ナレッジの有無に関わらず、そもそも接触頻度が低い。</p>
+        <span class="rival-status">今回は主因から除外</span>
+      </div>
+      <div class="rival-card rejected">
+        <div class="rival-label">仮説 D</div>
+        <h4>標準化マニュアルは存在するが現場と乖離</h4>
+        <p>形式知はあるが実態に合っていないため使われない。更新コストが問題。</p>
+        <span class="rival-status">今回は主因から除外</span>
+      </div>
+      <div class="rival-card adopted">
+        <div class="rival-label">仮説 A ← 採用</div>
+        <h4>ナレッジ自体が人の頭にしかない</h4>
+        <p>SV・本部担当者の知見が標準化されておらず、「人が教えるしかない」構造になっている。</p>
+        <span class="rival-status">本レポートの主軸仮説</span>
+      </div>
+    </div>
+
+    <p style="color: var(--muted); font-size: 13px; margin-top:8px;">※ 実際には複数の仮説が重なっている場合が多い。SVや加盟店への短期ヒアリングで主因を特定してから投資判断するのが望ましい。</p>
+
+    <div class="hypothesis">
+      <p>採用仮説：「教えるコストではなく、<strong>ナレッジが人の頭の中にしかないこと</strong>がコストを生んでいる」</p>
+    </div>
+
+    <div class="flow">
+      <div class="flow-item">
+        <div class="flow-text">ナレッジが標準化されていない（SV・本部の頭の中にある）</div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-text">SVや本部担当者が直接説明するしかない → スケールしない</div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-text">加盟店が増えるほど・スタッフが辞めるほど、その人件費が積み上がる</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TWO STEPS -->
+<section>
+  <div class="container">
+    <div class="section-label">解き方の構造</div>
+    <h2>2段階のアプローチ</h2>
+    <p>この仮説を解くには2段階が必要で、<strong>順序が逆になると機能しない</strong>。</p>
+
+    <div class="steps-grid">
+      <div class="step-card a">
+        <div class="step-num">A</div>
+        <h3>Step A — 先に必須</h3>
+        <p>暗黙知を<br>形式知に変換する</p>
+      </div>
+      <div class="step-card b">
+        <div class="step-num">B</div>
+        <h3>Step B — Aの後</h3>
+        <p>形式知を<br>AIでスケールさせる</p>
+      </div>
+    </div>
+
+    <div class="critical-note">
+      <strong>よくある失敗パターン</strong>：Step Aをスキップしていきなり RAG / チャットボットを導入する → 低品質なナレッジをAIが展開するだけになり、現場の信頼を失う。
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES -->
+<section>
+  <div class="container">
+    <div class="section-label">他業界の解決事例（数値・出典付き）</div>
+    <h2>ナレッジの非標準化を解いた事例</h2>
+
+    <div class="cases">
+
+      <!-- Case 1: 三井住友カード（最強エビデンス） -->
+      <div class="case-card step-b">
+        <div class="case-header">
+          <span class="case-tag">Step B｜金融</span>
+          <span class="reliability-badge verified">数値検証済み</span>
+        </div>
+        <h3>RAG × コンタクトセンター｜三井住友カード × ELYZA</h3>
+        <p>月間50万件超の問い合わせに対応するため、RAG技術で社内データを検索し回答草案を自動生成するシステムを導入。2024年6月よりメール回答業務で本番運用開始。</p>
+
+        <div class="metrics-row">
+          <div class="metric-box">
+            <span class="metric-num">60%</span>
+            <span class="metric-label">対応時間<br>削減見込み</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-num">50万件</span>
+            <span class="metric-label">月間問い合わせ数<br>（対応規模）</span>
+          </div>
+        </div>
+
+        <p style="font-size:14px;">コンタクトセンター担当者が複数のシステムを横断して情報収集していた工程を、RAGが一括代替。担当者はAIの草案を確認・修正するだけになった。</p>
+
+        <div class="fc-translation">
+          <strong>FC転用イメージ：</strong>SVが加盟店からの電話・メール対応履歴をRAGで学習 → 加盟店が自己解決できるチャットを構築。SVの対応工数を60%削減できる可能性。
+        </div>
+
+        <div class="result-box">→ 問い合わせ対応時間を最大60%短縮する見込み（2024年6月運用開始）</div>
+        <div class="source-link">
+          出典：<a href="https://prtimes.jp/main/html/rd/p/000000506.000032321.html" target="_blank">PRtimes（三井住友カード × ELYZA）</a>
+          ／ <a href="https://enterprisezine.jp/news/detail/19976" target="_blank">EnterpriseZine</a>
+        </div>
+      </div>
+
+      <!-- Case 2: セゾンテクノロジー（最強エビデンス） -->
+      <div class="case-card step-b">
+        <div class="case-header">
+          <span class="case-tag">Step B｜IT・製造</span>
+          <span class="reliability-badge verified">数値検証済み</span>
+        </div>
+        <h3>マニュアルのRAG化｜セゾンテクノロジー × Amazon Bedrock</h3>
+        <p>数万ページのマニュアル・FAQ・過去問い合わせ履歴をRAG化。若手エンジニアがベテラン同等の回答を即時に出せる環境を構築。</p>
+
+        <div class="metrics-row">
+          <div class="metric-box">
+            <span class="metric-num">30%</span>
+            <span class="metric-label">回答作成時間<br>短縮</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-num">80-90%</span>
+            <span class="metric-label">回答精度<br>（前処理後）</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-num">50-60%</span>
+            <span class="metric-label">データ加工<br>工数削減</span>
+          </div>
+        </div>
+
+        <p style="font-size:14px;">RAG導入前の回答精度は30〜50%程度だったが、AIによる前処理パイプライン整備後に80〜90%まで向上。1,000件あたりの対応コストも大幅に圧縮された。</p>
+
+        <div class="fc-translation">
+          <strong>FC転用イメージ：</strong>本部マニュアル・過去のSV対応記録をRAG化 → 新規加盟店オーナーが自己解決。習熟度が上がれば集合研修の回数を削減できる。
+        </div>
+
+        <div class="result-box">→ 若手でもベテラン同等の回答品質を実現。育成コストを大幅削減</div>
+        <div class="source-link">
+          出典：<a href="https://aws.amazon.com/jp/blogs/news/gen-ai-usecase-saison-technology/" target="_blank">AWS公式ブログ（セゾンテクノロジー事例）</a>
+        </div>
+      </div>
+
+      <!-- Case 3: エムニ匠AI -->
+      <div class="case-card step-a">
+        <div class="case-header">
+          <span class="case-tag">Step A｜製造業</span>
+          <span class="reliability-badge partial">定性事例</span>
+        </div>
+        <h3>ベテラン暗黙知の言語化｜エムニ社「AIインタビュアー」</h3>
+        <p>過去データを一緒に見ながら「この年に数値が大きく変動していますが何があったのですか？」といった問いかけを投げかけることで、口下手なベテランからも暗黙知を自然に引き出す。CIT（重大事例技法）をベースにした段階的な深掘り設計が特徴。</p>
+        <p style="font-size:14px;">抽出された知見はそのままAIエージェントに反映され、「ベテランがいなくても、あの人に聞いたと同等の回答が得られる」状態を実現する。</p>
+
+        <div class="fc-translation">
+          <strong>FC転用イメージ：</strong>SVへの定期1on1をAIインタビュアーに置き換え。「あの加盟店が立て直せた理由は？」「そのときどう判断しましたか？」とAIが深掘りし、ナレッジを蓄積する。
+        </div>
+
+        <div class="result-box">→ ベテランがいなくても「あの人に聞いた」と同等の回答が得られる状態を実現</div>
+        <div class="critical-note" style="margin-top:12px; padding: 10px 14px;">
+          ⚠ 具体的な削減率・ROI数値は非公開。定性的な事例として参照。
+        </div>
+        <div class="source-link">
+          出典：<a href="https://media.emuniinc.jp/2025/02/25/manufacturing-skills-transfer/" target="_blank">エムニ社メディア</a>
+          ／ <a href="https://www.emuniinc.jp/" target="_blank">エムニ公式サイト</a>
+        </div>
+      </div>
+
+      <!-- Case 4: 大日コンサルタント -->
+      <div class="case-card step-a">
+        <div class="case-header">
+          <span class="case-tag">Step A｜建設業</span>
+          <span class="reliability-badge partial">一部検証済み</span>
+        </div>
+        <h3>SNS型ナレッジベース × RAG｜大日コンサルタント</h3>
+        <p>ベテランの知識を形式知化してデータベースに蓄積し、RAG方式の生成AIと連携。SNSのような操作性のアプリにAIチャットを組み合わせたことで、社内での知識投稿・共有が自然に促進された。</p>
+
+        <div class="metrics-row">
+          <div class="metric-box">
+            <span class="metric-num">3,500件+</span>
+            <span class="metric-label">社内記事<br>投稿数</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-num">月10回+</span>
+            <span class="metric-label">社員の半数以上が<br>月10回以上利用</span>
+          </div>
+        </div>
+
+        <p style="font-size:14px;">「いいね！」機能など SNS 的UXを採用したことで投稿へのハードルを下げ、ベテランが自然にナレッジを書き込む文化を醸成した。</p>
+
+        <div class="fc-translation">
+          <strong>FC転用イメージ：</strong>SV同士のナレッジ共有をSNS型ツールで促進 → 自然と形式知が積み上がる。RAGに連携すれば加盟店向けQ&Aに転用可能。
+        </div>
+
+        <div class="result-box">→ 社内3,500件以上の記事投稿。社員の半数以上が月10回以上利用</div>
+        <div class="critical-note" style="margin-top:12px; padding: 10px 14px;">
+          ⚠ 使用量は確認済み。コスト削減の直接的な数値は非公開。
+        </div>
+        <div class="source-link">
+          出典：<a href="https://bim-design.com/infra/case/dainichi-consultant.html" target="_blank">BIM Design（大日コンサルタント事例）</a>
+        </div>
+      </div>
+
+      <!-- Case 5: LINE Yahoo SeekAI（新規追加） -->
+      <div class="case-card step-b">
+        <div class="case-header">
+          <span class="case-tag">Step B｜IT大手</span>
+          <span class="reliability-badge verified">数値検証済み</span>
+        </div>
+        <h3>社内RAG「SeekAI」｜LINEヤフー</h3>
+        <p>社内問い合わせ・技術選定・カスタマーサポートにRAGを活用。社内の膨大なドキュメントから必要情報を即時検索し、回答を自動生成するシステムを全社展開。</p>
+
+        <div class="metrics-row">
+          <div class="metric-box">
+            <span class="metric-num">98%</span>
+            <span class="metric-label">テスト段階の<br>回答精度</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-num">40%</span>
+            <span class="metric-label">営業コスト<br>削減</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-num">1.2万時間</span>
+            <span class="metric-label">年間削減<br>業務工数</span>
+          </div>
+        </div>
+
+        <div class="fc-translation">
+          <strong>FC転用イメージ：</strong>本部の社内Q&A環境を加盟店向けに転用。開業手続き・オペレーション変更・クレーム対応フローを24時間検索できる環境を構築。
+        </div>
+
+        <div class="result-box">→ 全社展開後に年間7,000〜8,000万工数時間削減の見込み</div>
+        <div class="source-link">
+          出典：<a href="https://www.techfirm.co.jp/blog/rag-case-study" target="_blank">Tech Firm（RAG事例10選）</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FC TRANSLATION TABLE -->
+<section>
+  <div class="container">
+    <div class="section-label">FC本部への転用</div>
+    <h2>他業界の課題をFCに置き換える</h2>
+    <p style="color:var(--muted); font-size:14px;">重要な留意点：上記の事例はすべて<strong>社内向け</strong>（社員が使う）のシステム。FCでは「加盟店オーナー」という<strong>外部の独立事業者</strong>が使う点が異なる。UI・権限設計・サポート体制の設計が追加で必要になる。</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>一般企業の課題</th>
+          <th>FC本部に置き換えると</th>
+          <th>社内 vs FC の差異</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ベテランの暗黙知</td>
+          <td>SVや本部担当者のノウハウ・対応ナレッジ</td>
+          <td>同等。転用しやすい</td>
+        </tr>
+        <tr>
+          <td>若手エンジニアの育成コスト</td>
+          <td>新規加盟店のオンボーディングコスト</td>
+          <td>加盟店はITリテラシーが低い場合あり</td>
+        </tr>
+        <tr>
+          <td>同じ質問の繰り返し対応</td>
+          <td>加盟店からの都度問い合わせ（SV電話）</td>
+          <td>同等。最も転用しやすい領域</td>
+        </tr>
+        <tr>
+          <td>担当者依存・属人化</td>
+          <td>SV人員の頭数依存・担当者退職で崩れる</td>
+          <td>同等。ただし外部公開のセキュリティ設計が必要</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ROADMAP with OBSTACLES -->
+<section>
+  <div class="container">
+    <div class="section-label">実行ステップ（障壁付き）</div>
+    <h2>打ち手の順序と各ステップの障壁</h2>
+    <p>各ステップの間に存在する「詰まりポイント」を事前に認識しておくことが重要。</p>
+
+    <div class="roadmap">
+      <div class="roadmap-item">
+        <div class="roadmap-num">1</div>
+        <div class="roadmap-content">
+          <h3>SVや本部のノウハウをインタビューで言語化</h3>
+          <p>AIインタビュアー型（エムニ社手法）または既存の対応ログ・メール・議事録から自動抽出。データを見せながら問いかける設計が重要。</p>
+          <div class="roadmap-obstacle">⚠ 障壁：SVが「言語化する必要性」を感じない・自分のノウハウが盗まれることへの抵抗感</div>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-num">2</div>
+        <div class="roadmap-content">
+          <h3>マニュアル・FAQ・対応履歴をデータ化・構造化</h3>
+          <p>紙・PDF・Excelで眠っている既存資産をデジタル化。RAGが効果を発揮するためには「検索にヒットする形式」への整備が最大の下準備。</p>
+          <div class="roadmap-obstacle">⚠ 障壁：この整備作業自体に相当の工数がかかる（最もコストがかかるフェーズ）</div>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-num">3</div>
+        <div class="roadmap-content">
+          <h3>RAG型AIチャットボットとして加盟店に開放</h3>
+          <p>加盟店が24時間いつでも「SVに聞いたのと同じ回答」を自己解決できる環境を構築。スモールスタートで精度を検証しながら拡張する。</p>
+          <div class="roadmap-obstacle">⚠ 障壁：加盟店オーナーのITリテラシーがばらつく。「使ってもらえる」UI・習慣化施策が必要</div>
+        </div>
+      </div>
+      <div class="roadmap-item">
+        <div class="roadmap-num">4</div>
+        <div class="roadmap-content">
+          <h3>SVは「例外対応・関係構築」に集中</h3>
+          <p>AIが定型対応を担うことで、SVは人にしかできない高付加価値な業務にシフト。ここで初めてSV人数を増やさずに加盟店を増やせる状態になる。</p>
+          <div class="roadmap-obstacle">⚠ 障壁：SVが役割転換できるか。「楽になった」で止まらず、より難しい仕事にシフトできるかが問われる</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVIDENCE SUMMARY -->
+<section>
+  <div class="container">
+    <div class="section-label">エビデンスサマリー</div>
+    <h2>使える数値の信頼度マップ</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>事例</th>
+          <th>主な数値</th>
+          <th>信頼度</th>
+          <th>FC転用しやすさ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>三井住友カード × ELYZA</td>
+          <td>対応時間60%削減見込み、月50万件対応</td>
+          <td>◎ PRtimes・公式PDF確認済み</td>
+          <td>★★★ 最も直接転用可能</td>
+        </tr>
+        <tr>
+          <td>セゾンテクノロジー</td>
+          <td>精度30→90%、工数50〜60%削減</td>
+          <td>◎ AWS公式ブログ確認済み</td>
+          <td>★★★ 技術・育成コスト削減の根拠として強い</td>
+        </tr>
+        <tr>
+          <td>LINEヤフー SeekAI</td>
+          <td>精度98%、営業コスト40%削減</td>
+          <td>○ 複数メディア確認済み</td>
+          <td>★★ 大規模組織向け。FC規模へのスケールダウンが課題</td>
+        </tr>
+        <tr>
+          <td>大日コンサルタント</td>
+          <td>3,500件投稿、月10回以上利用</td>
+          <td>△ 利用量は確認。コスト削減は非公開</td>
+          <td>★★ Step Aのナレッジ化促進として参考になる</td>
+        </tr>
+        <tr>
+          <td>エムニ「AIインタビュアー」</td>
+          <td>定量数値は非公開</td>
+          <td>△ 定性事例のみ</td>
+          <td>★ Step Aの手法として参考。PoC前提で検討</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  FC本部向け AI活用考察レポート Ver.2｜クリティカルシンキング改訂版
+</footer>
+
+</body>
+</html>
