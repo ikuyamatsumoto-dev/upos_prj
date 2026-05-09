@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>仮説B｜「次に誰に連絡すべきか」をAIで自動生成｜ユーポス AI活用提案</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Noto+Sans+JP:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#1a1814; --paper:#f7f4ef; --accent:#2c5f4a; --accent-light:#e8f4ef; --muted:#7a7570; --border:#ddd8d0; --hypo:#2c5f4a; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Noto Sans JP',sans-serif; background:var(--paper); color:var(--ink); line-height:1.8; font-weight:300; }
+  header { border-bottom:3px solid var(--ink); padding:50px 0 36px; text-align:center; position:relative; }
+  header::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:var(--hypo); }
+  .hypo-badge { display:inline-block; background:var(--hypo); color:white; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.15em; padding:4px 14px; margin-bottom:16px; }
+  .back-link { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); text-decoration:none; display:block; margin-bottom:12px; }
+  .back-link:hover { color:var(--hypo); }
+  header h1 { font-family:'Noto Serif JP',serif; font-size:clamp(20px,3.5vw,34px); font-weight:700; line-height:1.4; max-width:680px; margin:0 auto 12px; }
+  header .sub { color:var(--muted); font-size:13px; font-family:'DM Mono',monospace; letter-spacing:0.05em; }
+  .container { max-width:800px; margin:0 auto; padding:0 32px; }
+  section { padding:52px 0; border-bottom:1px solid var(--border); }
+  section:last-child { border-bottom:none; }
+  .section-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.25em; text-transform:uppercase; color:var(--muted); margin-bottom:20px; display:flex; align-items:center; gap:12px; }
+  .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+  h2 { font-family:'Noto Serif JP',serif; font-size:clamp(18px,2.8vw,26px); font-weight:700; margin-bottom:20px; line-height:1.4; }
+  p { font-size:15px; margin-bottom:14px; color:#3a3630; }
+  a { color:var(--hypo); }
+  .hypo-block { background:var(--ink); color:var(--paper); padding:36px 44px; margin:28px 0; position:relative; }
+  .hypo-block::before { content:'"'; font-family:'Noto Serif JP',serif; font-size:100px; color:var(--hypo); opacity:0.4; position:absolute; top:-16px; left:28px; line-height:1; }
+  .hypo-block p { font-family:'Noto Serif JP',serif; font-size:clamp(15px,2.2vw,19px); color:var(--paper); position:relative; z-index:1; line-height:1.8; margin:0; }
+  .hypo-block strong { color:#90e0b8; }
+  .flow { display:flex; flex-direction:column; margin:24px 0; }
+  .flow-item { padding:16px 0 16px 24px; border-left:2px solid var(--border); position:relative; }
+  .flow-item::before { content:''; width:9px; height:9px; border-radius:50%; background:var(--hypo); position:absolute; left:-5px; top:22px; }
+  .flow-item:last-child { border-left:2px solid transparent; }
+  .flow-text { font-size:14px; color:#3a3630; }
+  .cases { display:flex; flex-direction:column; gap:28px; margin:28px 0; }
+  .case-card { border:1px solid var(--border); position:relative; }
+  .case-card::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--hypo); }
+  .case-head { padding:20px 24px 16px 28px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+  .case-head h3 { font-family:'Noto Serif JP',serif; font-size:17px; font-weight:700; margin:0; line-height:1.4; }
+  .src-tag { font-family:'DM Mono',monospace; font-size:10px; border:1px solid var(--border); padding:2px 8px; color:var(--muted); white-space:nowrap; }
+  .case-body { padding:18px 24px 22px 28px; }
+  .metrics { display:flex; gap:0; margin:16px 0; flex-wrap:wrap; }
+  .metric { background:var(--ink); color:white; padding:12px 18px; text-align:center; min-width:100px; flex:1; border-right:1px solid rgba(255,255,255,0.1); }
+  .metric:last-child { border-right:none; }
+  .metric .num { font-family:'DM Mono',monospace; font-size:20px; font-weight:500; color:#90e0b8; display:block; line-height:1; margin-bottom:4px; }
+  .metric .lbl { font-size:11px; opacity:0.7; line-height:1.3; display:block; }
+  .what { background:#f0f8f4; padding:14px 18px; margin:14px 0; font-size:14px; line-height:1.8; color:#1a3a2a; }
+  .result { background:var(--accent-light); border-left:3px solid var(--hypo); padding:10px 14px; font-size:13px; color:var(--hypo); font-family:'DM Mono',monospace; margin-top:12px; }
+  .src { margin-top:12px; font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); }
+  .src a { font-size:11px; }
+  .tools { display:flex; flex-direction:column; gap:24px; margin:24px 0; }
+  .tool { border:1px solid var(--border); padding:24px 28px; position:relative; }
+  .tool::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--hypo); }
+  .tool-tag { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; background:var(--hypo); color:white; padding:3px 9px; display:inline-block; margin-bottom:10px; }
+  .tool h3 { font-size:15px; font-weight:500; margin-bottom:10px; }
+  .tool-meta { display:flex; border:1px solid var(--border); margin:12px 0; }
+  .tm { flex:1; padding:10px 12px; border-right:1px solid var(--border); text-align:center; }
+  .tm:last-child { border-right:none; }
+  .tm .ml { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:4px; }
+  .tm .mv { font-family:'DM Mono',monospace; font-size:13px; font-weight:500; display:block; }
+  .fc-box { background:var(--accent-light); border-left:3px solid var(--hypo); padding:10px 14px; margin-top:12px; font-size:13px; color:#1a3a2a; }
+  .fc-box strong { color:var(--hypo); }
+  .roadmap { display:flex; flex-direction:column; margin:24px 0; }
+  .rm-item { display:flex; gap:20px; padding-bottom:28px; position:relative; }
+  .rm-item::after { content:''; position:absolute; left:17px; top:36px; bottom:0; width:2px; background:var(--border); }
+  .rm-item:last-child::after { display:none; }
+  .rm-num { width:36px; height:36px; border-radius:50%; background:var(--hypo); color:white; display:flex; align-items:center; justify-content:center; font-family:'DM Mono',monospace; font-size:13px; flex-shrink:0; position:relative; z-index:1; }
+  .rm-content h3 { font-size:14px; font-weight:500; padding-top:6px; margin-bottom:5px; }
+  .rm-content p { font-size:13px; color:var(--muted); margin:0; }
+  .rm-obs { margin-top:7px; font-size:11px; color:#8a6a00; font-family:'DM Mono',monospace; background:#fdf6e3; padding:5px 9px; border-left:2px solid #8a6a00; }
+  footer { text-align:center; padding:36px 32px; font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); letter-spacing:0.1em; border-top:1px solid var(--border); }
+  @media(max-width:600px) { .metrics { flex-direction:column; } .metric { border-right:none; border-bottom:1px solid rgba(255,255,255,0.1); } .tool-meta { flex-direction:column; } .tm { border-right:none; border-bottom:1px solid var(--border); } }
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <a href="index.html" class="back-link">← 仮説一覧に戻る</a>
+    <div class="hypo-badge">仮説 B｜意思決定・次のアクションの問題</div>
+    <h1>データはある。でも<br>「今誰に連絡すべきか」が見えていない</h1>
+    <div class="sub">ユーポス × 基幹システム AI活用提案｜仮説B レポート</div>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="section-label">仮説の構造</div>
+    <h2>なぜ「データがある」のに追客できないのか</h2>
+    <div class="hypo-block">
+      <p>「データはあるが、<strong>『今誰に・何を・いつ連絡すべきか』というアクションに自動変換されていない</strong>ため、結局は担当者の経験と勘頼りになっている」</p>
+    </div>
+    <div class="flow">
+      <div class="flow-item"><div class="flow-text">車検時期・購入日・買い替えサイクルのデータは基幹システムに存在する</div></div>
+      <div class="flow-item"><div class="flow-text">しかし「誰に今週連絡すべきか」は担当者が自分でリストを見て判断している</div></div>
+      <div class="flow-item"><div class="flow-text">担当者の力量・経験・モチベーションで追客の質と量がバラつく</div></div>
+      <div class="flow-item"><div class="flow-text">追客漏れ・タイミングのずれによる機会損失が毎月発生し続けている</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-label">他社の実績（数値付き）</div>
+    <h2>「次のアクション」をAIで自動生成した事例</h2>
+    <div class="cases">
+
+      <div class="case-card">
+        <div class="case-head">
+          <h3>日産東京販売HD × TCS｜毎月「購入確率ランキング」を全CAに自動配布</h3>
+          <span class="src-tag">TCS 事例ページ</span>
+        </div>
+        <div class="case-body">
+          <div class="metrics">
+            <div class="metric"><span class="num">4年連続</span><span class="lbl">営業利益<br>40億円以上</span></div>
+            <div class="metric"><span class="num">140〜150件</span><span class="lbl">400〜500件の基盤顧客から<br>月次で自動絞り込み</span></div>
+          </div>
+          <div class="what">販売管理システムの顧客・受注データをIBM SPSS Modelerで機械学習。毎月「購入確率の高い顧客ランキング」を自動生成しCA（営業）に配布。「経験・勘頼りの『だろう営業』」から「確率ランキング順の体系的追客」に転換。CAが「自信を持って優先顧客に集中できる」ようになった。</div>
+          <div class="result">→ 「誰に先に連絡すべきか」が毎月自動で出力される。まさに仮説Bの解決事例</div>
+          <div class="src">出典：<a href="https://www.tcs-net.co.jp/case/yosokubunseki2/" target="_blank">TCS 日産東京販売HD 予測分析事例</a></div>
+        </div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-head">
+          <h3>LINX｜車検2ヶ月前に自動LINE通知。成約率1.5〜10倍</h3>
+          <span class="src-tag">LINX公式 / ツカサ工業</span>
+        </div>
+        <div class="case-body">
+          <div class="metrics">
+            <div class="metric"><span class="num">1.5〜10倍</span><span class="lbl">成約率向上<br>（導入店舗実績）</span></div>
+            <div class="metric"><span class="num">437万円/年</span><span class="lbl">通信費＋人件費<br>の削減効果</span></div>
+            <div class="metric"><span class="num">月5,000円〜</span><span class="lbl">ライトプラン<br>（IT補助金対象）</span></div>
+          </div>
+          <div class="what">車検満了日・整備履歴・購入日をもとに「車検2ヶ月前」などのタイミングで自動LINE通知。担当者が手作業でリストを作る必要がなく、システムが「今連絡すべき顧客」に自動でメッセージを送る。SMS比で通信費約197万円削減、営業1名相当（240万円/年）の人件費削減効果も。</div>
+          <div class="result">→ 年間12,000通の車検案内を自動化。成約率最大10倍のケースも</div>
+          <div class="src">出典：<a href="https://l-linx.com/" target="_blank">LINX公式</a> ／ <a href="https://www.tsukasa-ict.com/2020/11/linx_automotive/" target="_blank">ツカサ工業 解説記事</a></div>
+        </div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-head">
+          <h3>自動車整備工場（汎用）｜予約＋リマインド自動化の効果</h3>
+          <span class="src-tag">Aetheris AI活用ガイド 2026年版</span>
+        </div>
+        <div class="case-body">
+          <div class="metrics">
+            <div class="metric"><span class="num">+32%</span><span class="lbl">車検前フォローで<br>入庫率向上</span></div>
+            <div class="metric"><span class="num">-45%</span><span class="lbl">当日キャンセル<br>削減</span></div>
+            <div class="metric"><span class="num">84%削減</span><span class="lbl">電話対応時間<br>（2.5h→0.4h/日）</span></div>
+          </div>
+          <div class="what">車検2ヶ月前の自動フォロー・予約前日のリマインド・見積書のAI自動作成を導入した整備工場の汎用的な数値。「車検時期が近い顧客に連絡する」というアクションをAIが自動実行することで、人手ゼロで追客が回るようになった。</div>
+          <div class="result">→ 車検前フォロー自動化だけで入庫率32%向上。担当者の電話工数も84%削減</div>
+          <div class="src">出典：<a href="https://aetheris-jp.com/blog/066" target="_blank">Aetheris AI活用完全ガイド2026年版</a></div>
+        </div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-head">
+          <h3>トヨタ × ギックス｜AI整備見積もりで「提案内容」まで自動生成</h3>
+          <span class="src-tag">CAR CARE PLUS 2024年9月</span>
+        </div>
+        <div class="case-body">
+          <div class="metrics">
+            <div class="metric"><span class="num">8〜9割</span><span class="lbl">AI整備見積もり<br>の予測精度</span></div>
+            <div class="metric"><span class="num">23店舗</span><span class="lbl">TM新大阪で<br>先行導入</span></div>
+          </div>
+          <div class="what">AIが約80項目の整備内容を診断し、実車確認・分解なしで半年後の車検概算見積もりを自動生成。「車検が近い顧客に提案するコンテンツ（見積もり）」そのものをAIが作る。通知のタイミングだけでなく、提案内容まで自動化した先進事例。</div>
+          <div class="result">→ 2025年1月より全国のトヨタ系列販売店に展開予定</div>
+          <div class="src">出典：<a href="https://carcareplus.jp/article/2024/09/12/10067.html" target="_blank">CAR CARE PLUS（トヨタ×ギックス）</a></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-label">実装パターン</div>
+    <h2>ユーポス規模で現実的な構成</h2>
+    <div class="tools">
+
+      <div class="tool">
+        <span class="tool-tag">Pattern 01｜最速・最安</span>
+        <h3>LINX（月5,000円〜）で車検・買い替えタイミング自動LINE通知</h3>
+        <div class="tool-meta">
+          <div class="tm"><span class="ml">構築期間</span><span class="mv">1〜2週間</span></div>
+          <div class="tm"><span class="ml">月額コスト</span><span class="mv">5,000円〜</span></div>
+          <div class="tm"><span class="ml">IT補助金</span><span class="mv">最大74万円対象</span></div>
+        </div>
+        <p style="font-size:14px;">自動車業界特化のLINEシナリオ自動化ツール。車検満了日をトリガーに「2ヶ月前→1ヶ月前→直前」と段階的に自動通知。担当者は通知された顧客に返信するだけ。</p>
+        <div class="fc-box"><strong>ユーポス向け：</strong>89店舗の車検時期データをLINXに連携するだけで、全店舗で均質な追客が自動化される。SVが個別に指示しなくても追客漏れがなくなる。</div>
+      </div>
+
+      <div class="tool">
+        <span class="tool-tag">Pattern 02｜高精度</span>
+        <h3>n8n + CRM + Claude API で「今月の優先顧客リスト」を自動生成</h3>
+        <div class="tool-meta">
+          <div class="tm"><span class="ml">構築期間</span><span class="mv">2〜4週間</span></div>
+          <div class="tm"><span class="ml">月額コスト</span><span class="mv">1〜3万円程度</span></div>
+          <div class="tm"><span class="ml">必要スキル</span><span class="mv">エンジニア1名</span></div>
+        </div>
+        <p style="font-size:14px;">顧客DBから「車検時期・購入からの経過年数・過去来店頻度」を取得し、Claude APIでスコアリング→優先度付きリストをSlack/LINEで毎週月曜朝に自動配信。日産東京販売HDのTCS事例を中小規模で再現する構成。</p>
+        <div class="fc-box"><strong>ユーポス向け：</strong>各店舗の担当者が月曜朝に「今週連絡すべき顧客5件」を自動受信する仕組み。担当者の経験・勘に依存せず全店舗で標準的な追客品質を維持できる。</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-label">実行ステップ</div>
+    <h2>ユーポスが仮説Bを解くためのロードマップ</h2>
+    <div class="roadmap">
+      <div class="rm-item">
+        <div class="rm-num">1</div>
+        <div class="rm-content">
+          <h3>「追客すべきトリガー」を定義する</h3>
+          <p>車検時期・購入から3年・過去査定から6ヶ月など「このタイミングで連絡すると成約しやすい」条件を現場のベテランと一緒に言語化する。これがAIルールの土台になる。</p>
+          <div class="rm-obs">⚠ 障壁：ベテランが「感覚でやっている」ため言語化が難しい場合がある</div>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-num">2</div>
+        <div class="rm-content">
+          <h3>LINXで車検タイミング通知をスモールスタート</h3>
+          <p>まず「車検2ヶ月前自動通知」だけをLINXで自動化。月5,000円で始められる。1〜2店舗で試して「通知後の返信率・来店率」を計測する。</p>
+          <div class="rm-obs">⚠ 障壁：顧客のLINE登録率が低いと効果が出ない。LINE友達追加の仕組みを先に整える必要がある</div>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-num">3</div>
+        <div class="rm-content">
+          <h3>優先顧客ランキングをAIで自動生成（TCS型）</h3>
+          <p>成果が出たら、車検以外のトリガー（買い替え時期・過去査定客・長期未来店）も加えた「総合スコアリング」に発展させる。毎週自動で「今週のベスト10」が届く仕組みを構築。</p>
+          <div class="rm-obs">⚠ 障壁：精度の高いスコアリングには過去の成約データが一定量必要（少なくとも数百件）</div>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-num">4</div>
+        <div class="rm-content">
+          <h3>通知→アクション→結果のループを自動記録</h3>
+          <p>「通知した→来店した／しなかった」の結果をCRMに自動記録することで、AIのスコアリング精度が時間とともに向上する。使うほど賢くなる仕組みを作る。</p>
+          <div class="rm-obs">⚠ 障壁：「来店した」という結果データを現場が入力してくれるかどうかが精度向上のカギ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>ユーポス AI活用提案｜仮説B：意思決定・次のアクションの問題 ／ <a href="index.html">← 仮説一覧</a></footer>
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>仮説C｜ITに不慣れな現場でもAIが定着する設計｜ユーポス AI活用提案</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Noto+Sans+JP:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#1a1814; --paper:#f7f4ef; --accent:#5f2c4a; --accent-light:#f5ecf0; --muted:#7a7570; --border:#ddd8d0; --hypo:#5f2c4a; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Noto Sans JP',sans-serif; background:var(--paper); color:var(--ink); line-height:1.8; font-weight:300; }
+  header { border-bottom:3px solid var(--ink); padding:50px 0 36px; text-align:center; position:relative; }
+  header::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:var(--hypo); }
+  .hypo-badge { display:inline-block; background:var(--hypo); color:white; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.15em; padding:4px 14px; margin-bottom:16px; }
+  .back-link { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); text-decoration:none; display:block; margin-bottom:12px; }
+  .back-link:hover { color:var(--hypo); }
+  header h1 { font-family:'Noto Serif JP',serif; font-size:clamp(20px,3.5vw,34px); font-weight:700; line-height:1.4; max-width:680px; margin:0 auto 12px; }
+  header .sub { color:var(--muted); font-size:13px; font-family:'DM Mono',monospace; letter-spacing:0.05em; }
+  .container { max-width:800px; margin:0 auto; padding:0 32px; }
+  section { padding:52px 0; border-bottom:1px solid var(--border); }
+  section:last-child { border-bottom:none; }
+  .section-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.25em; text-transform:uppercase; color:var(--muted); margin-bottom:20px; display:flex; align-items:center; gap:12px; }
+  .section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+  h2 { font-family:'Noto Serif JP',serif; font-size:clamp(18px,2.8vw,26px); font-weight:700; margin-bottom:20px; line-height:1.4; }
+  p { font-size:15px; margin-bottom:14px; color:#3a3630; }
+  a { color:var(--hypo); }
+  .hypo-block { background:var(--ink); color:var(--paper); padding:36px 44px; margin:28px 0; position:relative; }
+  .hypo-block::before { content:'"'; font-family:'Noto Serif JP',serif; font-size:100px; color:var(--hypo); opacity:0.4; position:absolute; top:-16px; left:28px; line-height:1; }
+  .hypo-block p { font-family:'Noto Serif JP',serif; font-size:clamp(15px,2.2vw,19px); color:var(--paper); position:relative; z-index:1; line-height:1.8; margin:0; }
+  .hypo-block strong { color:#e0a8c0; }
+  .flow { display:flex; flex-direction:column; margin:24px 0; }
+  .flow-item { padding:16px 0 16px 24px; border-left:2px solid var(--border); position:relative; }
+  .flow-item::before { content:''; width:9px; height:9px; border-radius:50%; background:var(--hypo); position:absolute; left:-5px; top:22px; }
+  .flow-item:last-child { border-left:2px solid transparent; }
+  .flow-text { font-size:14px; color:#3a3630; }
+  .principle-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:24px 0; }
+  @media(max-width:600px) { .principle-grid { grid-template-columns:1fr; } }
+  .principle { border:1px solid var(--border); padding:20px; }
+  .principle .pnum { font-family:'DM Mono',monospace; font-size:28px; font-weight:500; color:var(--hypo); opacity:0.3; line-height:1; margin-bottom:8px; }
+  .principle h4 { font-size:14px; font-weight:500; margin-bottom:6px; }
+  .principle p { font-size:13px; color:var(--muted); margin:0; }
+  .cases { display:flex; flex-direction:column; gap:28px; margin:28px 0; }
+  .case-card { border:1px solid var(--border); position:relative; }
+  .case-card::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--hypo); }
+  .case-head { padding:20px 24px 16px 28px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+  .case-head h3 { font-family:'Noto Serif JP',serif; font-size:17px; font-weight:700; margin:0; line-height:1.4; }
+  .src-tag { font-family:'DM Mono',monospace; font-size:10px; border:1px solid var(--border); padding:2px 8px; color:var(--muted); white-space:nowrap; }
+  .case-body { padding:18px 24px 22px 28px; }
+  .metrics { display:flex; gap:0; margin:16px 0; flex-wrap:wrap; }
+  .metric { background:var(--ink); color:white; padding:12px 18px; text-align:center; min-width:100px; flex:1; border-right:1px solid rgba(255,255,255,0.1); }
+  .metric:last-child { border-right:none; }
+  .metric .num { font-family:'DM Mono',monospace; font-size:20px; font-weight:500; color:#e0a8c0; display:block; line-height:1; margin-bottom:4px; }
+  .metric .lbl { font-size:11px; opacity:0.7; line-height:1.3; display:block; }
+  .what { background:#f8f0f4; padding:14px 18px; margin:14px 0; font-size:14px; line-height:1.8; color:#3a1a2a; }
+  .result { background:var(--accent-light); border-left:3px solid var(--hypo); padding:10px 14px; font-size:13px; color:var(--hypo); font-family:'DM Mono',monospace; margin-top:12px; }
+  .src { margin-top:12px; font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); }
+  .src a { font-size:11px; }
+  .tools { display:flex; flex-direction:column; gap:24px; margin:24px 0; }
+  .tool { border:1px solid var(--border); padding:24px 28px; position:relative; }
+  .tool::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--hypo); }
+  .tool-tag { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; background:var(--hypo); color:white; padding:3px 9px; display:inline-block; margin-bottom:10px; }
+  .tool h3 { font-size:15px; font-weight:500; margin-bottom:10px; }
+  .tool-meta { display:flex; border:1px solid var(--border); margin:12px 0; }
+  .tm { flex:1; padding:10px 12px; border-right:1px solid var(--border); text-align:center; }
+  .tm:last-child { border-right:none; }
+  .tm .ml { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:4px; }
+  .tm .mv { font-family:'DM Mono',monospace; font-size:13px; font-weight:500; display:block; }
+  .fc-box { background:var(--accent-light); border-left:3px solid var(--hypo); padding:10px 14px; margin-top:12px; font-size:13px; color:#3a1a2a; }
+  .fc-box strong { color:var(--hypo); }
+  .roadmap { display:flex; flex-direction:column; margin:24px 0; }
+  .rm-item { display:flex; gap:20px; padding-bottom:28px; position:relative; }
+  .rm-item::after { content:''; position:absolute; left:17px; top:36px; bottom:0; width:2px; background:var(--border); }
+  .rm-item:last-child::after { display:none; }
+  .rm-num { width:36px; height:36px; border-radius:50%; background:var(--hypo); color:white; display:flex; align-items:center; justify-content:center; font-family:'DM Mono',monospace; font-size:13px; flex-shrink:0; position:relative; z-index:1; }
+  .rm-content h3 { font-size:14px; font-weight:500; padding-top:6px; margin-bottom:5px; }
+  .rm-content p { font-size:13px; color:var(--muted); margin:0; }
+  .rm-obs { margin-top:7px; font-size:11px; color:#8a6a00; font-family:'DM Mono',monospace; background:#fdf6e3; padding:5px 9px; border-left:2px solid #8a6a00; }
+  footer { text-align:center; padding:36px 32px; font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); letter-spacing:0.1em; border-top:1px solid var(--border); }
+  @media(max-width:600px) { .metrics { flex-direction:column; } .metric { border-right:none; border-bottom:1px solid rgba(255,255,255,0.1); } .tool-meta { flex-direction:column; } .tm { border-right:none; border-bottom:1px solid var(--border); } }
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <a href="index.html" class="back-link">← 仮説一覧に戻る</a>
+    <div class="hypo-badge">仮説 C｜スキル・習慣の問題</div>
+    <h1>AIを入れても現場で使われない<br>「定着しない」問題を先に解く</h1>
+    <div class="sub">ユーポス × 基幹システム AI活用提案｜仮説C レポート</div>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="section-label">仮説の構造</div>
+    <h2>なぜAIを導入しても現場で使われないのか</h2>
+    <div class="hypo-block">
+      <p>「<strong>現場スタッフのITリテラシーが低く、データを見ても次の行動に移せない</strong>ため、高機能なツールを入れるほど使われなくなる」</p>
+    </div>
+    <div class="flow">
+      <div class="flow-item"><div class="flow-text">ダッシュボードや分析画面を用意しても「見方がわからない」「どう動けばいいかわからない」で終わる</div></div>
+      <div class="flow-item"><div class="flow-text">「AIを使う」という新しい習慣が現場の日常業務に組み込まれていない</div></div>
+      <div class="flow-item"><div class="flow-text">ITに慣れたスタッフだけが使い、残りは従来の方法で動き続ける</div></div>
+      <div class="flow-item"><div class="flow-text">結果的にAIの恩恵が一部の人にしか届かず、組織全体のROIが出ない</div></div>
+    </div>
+
+    <div class="principle-grid">
+      <div class="principle">
+        <div class="pnum">01</div>
+        <h4>考えさせない設計</h4>
+        <p>ダッシュボードではなく「今日コレをしろ」とAIが先にアクションを提示する</p>
+      </div>
+      <div class="principle">
+        <div class="pnum">02</div>
+        <h4>使い慣れたツールに乗せる</h4>
+        <p>LINE / Slack など既存アプリの中で完結させ、新しいツールを覚えさせない</p>
+      </div>
+      <div class="principle">
+        <div class="pnum">03</div>
+        <h4>1アクションで完結</h4>
+        <p>ワンタップ・ボタン一つで顧客にメッセージ送信できる設計にする</p>
+      </div>
+      <div class="principle">
+        <div class="pnum">04</div>
+        <h4>数字より「今日やること」</h4>
+        <p>グラフ・指標ではなく「具体的なToDoリスト」を渡す</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-label">他社の実績（数値付き）</div>
+    <h2>現場定着を実現した自動車業界の事例</h2>
+    <div class="cases">
+
+      <div class="case-card">
+        <div class="case-head">
+          <h3>トヨタ系販売店「トヨトーク」× LINE WORKS｜営業スタッフはワンタップで完結</h3>
+          <span class="src-tag">LINE WORKS PRtimes</span>
+        </div>
+        <div class="case-body">
+          <div class="metrics">
+            <div class="metric"><span class="num">30店舗+</span><span class="lbl">全国の販売店が<br>2023年以降導入</span></div>
+            <div class="metric"><span class="num">0分析</span><span class="lbl">スタッフは分析不要<br>AIが指示を自動生成</span></div>
+          </div>
+          <div class="what">管理コンソールからAIが追客指示を自動生成 → 営業スタッフのLINE WORKSに「今日連絡すべき顧客」が自動通知 → スタッフはワンタップで顧客のLINEにメッセージ送信。スタッフは「誰に連絡するか」を自分で考える必要がなく、「通知が来たら送るだけ」の設計。ITリテラシーに関係なく全員が同じ動きができる。</div>
+          <div class="result">→ 追客漏れが大幅削減。スタッフはAIが出した指示に従うだけで追客が完結</div>
+          <div class="src">出典：<a href="https://prtimes.jp/main/html/rd/p/000000450.000020202.html" target="_blank">LINE WORKS PRtimes（トヨトーク）</a> ／ <a href="https://line-works.com/pr/20250228/" target="_blank">LINE WORKS公式</a></div>
+        </div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-head">
+          <h3>トヨタモビリティ東京 × MicoCloud LINE｜問い合わせ2倍・友達8,000人増</h3>
+          <span class="src-tag">Micoworks PRtimes</span>
+        </div>
+        <div class="case-body">
+          <div class="metrics">
+            <div class="metric"><span class="num">2倍</span><span class="lbl">LINE経由の<br>問い合わせ・来店予約</span></div>
+            <div class="metric"><span class="num">+8,000人</span><span class="lbl">LINE友達数<br>（前年比）</span></div>
+          </div>
+          <div class="what">少子高齢化・カーシェア普及で既存顧客との接点が薄れていた。LINE公式アカウントにMicoCloudを導入し、問い合わせ・試乗予約・カタログ請求をLINE上に統合。スタッフは専用管理画面で顧客対応するだけ。複雑な操作は不要。</div>
+          <div class="result">→ LINE経由の問い合わせ・来店予約が前年比2倍。LINEという「使い慣れたツール」に乗せた</div>
+          <div class="src">出典：<a href="https://prtimes.jp/main/html/rd/p/000000056.000040834.html" target="_blank">PRtimes（Micoworks × トヨタモビリティ東京）</a></div>
+        </div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-head">
+          <h3>IDOM（ガリバー）× AI査定｜ベテランの勘をAIに置き換え誰でも高精度</h3>
+          <span class="src-tag">Internet Watch / IDOM公式</span>
+        </div>
+        <div class="case-body">
+          <div class="metrics">
+            <div class="metric"><span class="num">0.5%以内</span><span class="lbl">AI査定の誤差<br>（従来は5%前後）</span></div>
+            <div class="metric"><span class="num">10分の1</span><span class="lbl">誤差を<br>圧縮</span></div>
+          </div>
+          <div class="what">査定士の経験に依存しすぎており、スタッフによって精度がバラバラだった。AIが写真と基本情報から査定額を算出する「Gulliver AUTO」アプリを開発。スタッフは写真を撮って情報を入力するだけ。ベテランの知識をAIに移植することで、誰でも高精度な査定ができるようになった。</div>
+          <div class="result">→ 専門家でも5%あった誤差を0.5%以内に圧縮。経験年数に関係なく全スタッフが高精度査定</div>
+          <div class="src">出典：<a href="https://internet.watch.impress.co.jp/docs/news/1117854.html" target="_blank">Internet Watch（DATUM STUDIO）</a></div>
+        </div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-head">
+          <h3>中古車ドレスアップ専門店 × Liny LINE配信｜月600万円の売上をLINEで創出</h3>
+          <span class="src-tag">Liny 活用事例</span>
+        </div>
+        <div class="case-body">
+          <div class="metrics">
+            <div class="metric"><span class="num">600万円/月</span><span class="lbl">LINE経由の<br>売上を継続創出</span></div>
+            <div class="metric"><span class="num">50件+/月</span><span class="lbl">買取問い合わせ<br>（無料施策のみ）</span></div>
+          </div>
+          <div class="what">Linyを使ってセグメント別LINE配信・車検日・オイル交換日などを収集して自動フォロー。週1〜2回のキャンペーン配信で毎月3台以上の成約を継続。複雑なシステムではなく「LINEで送る」という現場が理解できる設計が定着の要因。</div>
+          <div class="result">→ LINE経由で月600万円の売上。ITに詳しくないオーナーが運用しているケースも多い</div>
+          <div class="src">出典：<a href="https://line-sm.com/blog/car-sales-liny/" target="_blank">Liny 自動車販売活用事例</a></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-label">実装パターン</div>
+    <h2>「考えさせない設計」で現場が動く構成</h2>
+    <div class="tools">
+
+      <div class="tool">
+        <span class="tool-tag">Pattern 01｜最も定着しやすい</span>
+        <h3>LINE WORKS + 自動追客指示（トヨトーク型）</h3>
+        <div class="tool-meta">
+          <div class="tm"><span class="ml">スタッフ操作</span><span class="mv">ワンタップのみ</span></div>
+          <div class="tm"><span class="ml">月額コスト</span><span class="mv">440円/人〜</span></div>
+          <div class="tm"><span class="ml">必要スキル</span><span class="mv">LINEが使えれば可</span></div>
+        </div>
+        <p style="font-size:14px;">AIが「今日連絡すべき顧客」を自動生成 → LINE WORKSに通知 → スタッフはワンタップで送信。分析・判断・入力は一切不要。「LINEを使える人なら誰でも使える」が最重要設計原則。</p>
+        <div class="fc-box"><strong>ユーポス向け：</strong>89店舗のスタッフが同じ「ワンタップ追客」で動けば、全店舗で均質な顧客対応品質を維持できる。ベテランと新人の差がなくなる。</div>
+      </div>
+
+      <div class="tool">
+        <span class="tool-tag">Pattern 02｜朝の習慣化</span>
+        <h3>GAS + スプレッドシート + LINE で「今日の追客3件」を毎朝自動送信</h3>
+        <div class="tool-meta">
+          <div class="tm"><span class="ml">構築期間</span><span class="mv">1〜3日</span></div>
+          <div class="tm"><span class="ml">月額コスト</span><span class="mv">ほぼ0円</span></div>
+          <div class="tm"><span class="ml">必要スキル</span><span class="mv">JavaScript基礎</span></div>
+        </div>
+        <p style="font-size:14px;">スプレッドシートの顧客データをGASが毎朝8時にチェック → 当日フォロー対象を抽出 → LINE Messaging APIで「今日連絡すべき顧客3件」を担当者に自動送信。受け取ったら電話するだけ。</p>
+        <div class="fc-box"><strong>ユーポス向け：</strong>まず1店舗で試せるスモールスタート構成。月額ほぼ0円で「AIが今日やることを毎朝教えてくれる」体験を現場に届けられる。</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-label">実行ステップ</div>
+    <h2>ユーポスが仮説Cを解くためのロードマップ</h2>
+    <div class="roadmap">
+      <div class="rm-item">
+        <div class="rm-num">1</div>
+        <div class="rm-content">
+          <h3>現場スタッフが「今日使っているツール」を調べる</h3>
+          <p>LINE・Slack・Excel・電話——現場が日常的に使っているものを把握する。AIはそこに乗せる。新しいツールを覚えさせようとしない。</p>
+          <div class="rm-obs">⚠ 障壁：本部が「使うべきツール」を決めてしまいがちだが、現場の実態調査が先</div>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-num">2</div>
+        <div class="rm-content">
+          <h3>「今日やること3件」をLINEで送るだけの仕組みを1店舗で試す</h3>
+          <p>「毎朝LINEで追客リストが届いて、電話するだけ」というシンプルな体験を先に作る。難しいことは一切なし。定着したら横展開。</p>
+          <div class="rm-obs">⚠ 障壁：最初の1〜2週間は「本当にこれだけでいいの？」という戸惑いがある。慣れるまで並走が必要</div>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-num">3</div>
+        <div class="rm-content">
+          <h3>「電話した結果」を返信するだけで記録できる仕組みを追加</h3>
+          <p>「連絡した→来店予約あり」などの結果を、LINEの返信で記録できるようにする。入力フォームを開かなくて済む設計にすることが定着のカギ。</p>
+          <div class="rm-obs">⚠ 障壁：結果入力が手間だと誰もやらなくなる。「LINE返信するだけ」が最大の工夫ポイント</div>
+        </div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-num">4</div>
+        <div class="rm-content">
+          <h3>定着したら全89店舗に展開・AIの精度を上げる</h3>
+          <p>蓄積した「連絡した→結果」のデータを使って、AIのスコアリング精度を向上させる。使い始めてから賢くなる仕組みが完成する。</p>
+          <div class="rm-obs">⚠ 障壁：店舗ごとに顧客特性が違うため、全店一律のルールでは精度が出ない場合がある</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>ユーポス AI活用提案｜仮説C：スキル・習慣の問題 ／ <a href="index.html">← 仮説一覧</a></footer>
+</body>
+</html>
