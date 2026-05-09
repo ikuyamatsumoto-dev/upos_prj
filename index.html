@@ -28,7 +28,7 @@
   .hypo-card.b .hypo-card-top { background:#2c5f4a; }
   .hypo-card.c .hypo-card-top { background:#5f2c4a; }
   .hypo-card.d .hypo-card-top { background:#b5620a; }
-  .hypo-card-inner { padding:28px 28px 24px; }
+  .hypo-card-inner { padding:28px 28px 48px; }
   .hypo-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.2em; color:var(--muted); margin-bottom:10px; display:block; }
   .hypo-card.a .hypo-label { color:#1e3a5f; }
   .hypo-card.b .hypo-label { color:#2c5f4a; }
@@ -69,7 +69,7 @@
 <div class="container">
 
   <div class="intro">
-    <p>ユーポスの基幹システム（車両管理・顧客管理）にAIを組み合わせる新施策を検討するにあたり、ボトルネックの仮説を4つに分解しました。それぞれ独立した問題として深堀りし、実績事例・実装パターン・実行ロードマップを整理しています。</p>
+    <p>ユーポスのAI活用を阻むボトルネックを4つの仮説に分解しました。それぞれ独立した問題として深堀りし、今すぐ試せる実績事例・実装パターン・実行ロードマップを整理しています。</p>
     <div class="framework">
       <p><strong>クリティカルシンキングの前提：</strong>4つの仮説は排他的ではなく、複数が同時に存在している可能性があります。どの仮説が最も大きなボトルネックかを診断した上で、優先順位をつけて取り組むことを推奨します。</p>
     </div>
@@ -81,12 +81,12 @@
       <div class="hypo-card-top"></div>
       <div class="hypo-card-inner">
         <span class="hypo-label">HYPOTHESIS A</span>
-        <h2>データ統合問題<br>——車両DBと顧客DBが分断されている</h2>
-        <p>車両情報と顧客情報がサイロ化しており、「あの車を買った顧客が次に売ってくる可能性」を分析できない状態。</p>
+        <h2>査定の属人化問題<br>——ベテランがいないと査定が止まる</h2>
+        <p>査定精度・スピードがスタッフ個人の経験に依存しており、新人が自走できない。成約率と顧客満足度が店舗ごとにばらつく根本原因。</p>
         <div class="tag-row">
-          <span class="tag">symphony SaaS</span>
-          <span class="tag">kintone + AI</span>
-          <span class="tag">Salesforce</span>
+          <span class="tag">GAS + Claude API</span>
+          <span class="tag">Dify FAQ Bot</span>
+          <span class="tag">Slack Bot</span>
         </div>
         <div class="arrow">→</div>
       </div>
@@ -96,12 +96,12 @@
       <div class="hypo-card-top"></div>
       <div class="hypo-card-inner">
         <span class="hypo-label">HYPOTHESIS B</span>
-        <h2>意思決定・次のアクション問題<br>——データはあっても使えていない</h2>
-        <p>データが存在していても「誰に・いつ・どうアプローチすべきか」の判断を個人の経験に頼っており、組織として最適化できていない。</p>
+        <h2>顧客接点の手作業問題<br>——問い合わせ対応が遅れて他社に流れる</h2>
+        <p>LINE・電話・Webからの問い合わせを手動で対応しており、返信まで数時間〜翌日かかる。スピードが命の買取業において致命的な機会損失。</p>
         <div class="tag-row">
-          <span class="tag">LINX</span>
-          <span class="tag">n8n + CRM</span>
-          <span class="tag">Claude API</span>
+          <span class="tag">LINE + Lステップ</span>
+          <span class="tag">LINE AIbot</span>
+          <span class="tag">GAS + LINE通知</span>
         </div>
         <div class="arrow">→</div>
       </div>
@@ -111,12 +111,12 @@
       <div class="hypo-card-top"></div>
       <div class="hypo-card-inner">
         <span class="hypo-label">HYPOTHESIS C</span>
-        <h2>スキル・習慣問題<br>——現場がAIツールを使いこなせない</h2>
-        <p>ツールを導入しても、ITに不慣れな現場スタッフが使いこなせず形骸化する。「使わせる設計」がなければ投資が無駄になる。</p>
+        <h2>店舗間情報サイロ問題<br>——他店の状況がリアルタイムで見えない</h2>
+        <p>在庫・買取案件・顧客情報が各店舗に閉じており、FC全体としての最適な提案や本部の横断管理ができていない。</p>
         <div class="tag-row">
+          <span class="tag">kintone</span>
+          <span class="tag">Google Sheets + GAS</span>
           <span class="tag">LINE WORKS</span>
-          <span class="tag">GAS + LINE</span>
-          <span class="tag">ワンタップ設計</span>
         </div>
         <div class="arrow">→</div>
       </div>
@@ -126,12 +126,12 @@
       <div class="hypo-card-top"></div>
       <div class="hypo-card-inner">
         <span class="hypo-label">HYPOTHESIS D</span>
-        <h2>データ品質・入力精度問題<br>——手入力がデータを汚染している</h2>
-        <p>基幹DBへの入力が省略・誤記・未入力のままで蓄積されており、AIが参照できるクリーンなデータが実は揃っていない。</p>
+        <h2>書類・手入力の問題<br>——転記ミスと入力工数がデータを汚染する</h2>
+        <p>車検証・買取伝票・査定書の情報を手入力で転記しており、入力ミス・記入漏れが蓄積。AIが参照できるクリーンなデータが実は揃っていない。</p>
         <div class="tag-row">
-          <span class="tag">Whisper + Claude</span>
-          <span class="tag">車検証OCR</span>
-          <span class="tag">GAS + Gemini</span>
+          <span class="tag">Claude Vision</span>
+          <span class="tag">Gemini Vision</span>
+          <span class="tag">GAS + OCR</span>
         </div>
         <div class="arrow">→</div>
       </div>
@@ -150,11 +150,11 @@
       <div class="note-box">
         <span class="nb-label">Verified Cases</span>
         <h4>出典付き実績事例</h4>
-        <p>PRtimes・公式ブログ等で確認できた数値のみ「検証済み」掲載</p>
+        <p>今すぐ転用できる「手触り感のある」事例を出典・数値付きで掲載</p>
       </div>
       <div class="note-box">
         <span class="nb-label">Implementation</span>
-        <h4>一般エンジニアが作れる実装</h4>
+        <h4>導入しやすい実装パターン</h4>
         <p>構築時間・月額コスト・必要スキルを明記した現実的なパターン</p>
       </div>
     </div>
