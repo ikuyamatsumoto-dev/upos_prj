@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FC加盟店教育コスト削減｜一般エンジニアが作れるAI活用</title>
+<title>FC加盟店教育コスト削減｜AI活用の実態と実装アイデア</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Noto+Sans+JP:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -21,10 +21,8 @@
     --tool-4: #4a3c1e;
     --warning: #8a6a00;
     --warning-bg: #fdf6e3;
-    --zenn: #3ea8ff;
-    --qiita: #55c500;
-    --note: #41c9b4;
-    --x: #1a1814;
+    --note-color: #41c9b4;
+    --nikkei: #c00;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -75,28 +73,11 @@
     font-family: 'DM Mono', monospace;
     letter-spacing: 0.05em;
   }
-  .version-badge {
-    display: inline-block;
-    background: var(--step-a);
-    color: white;
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    padding: 3px 12px;
-    margin-top: 16px;
-  }
 
   /* ── LAYOUT ── */
-  .container {
-    max-width: 820px;
-    margin: 0 auto;
-    padding: 0 32px;
-  }
+  .container { max-width: 820px; margin: 0 auto; padding: 0 32px; }
 
-  section {
-    padding: 60px 0;
-    border-bottom: 1px solid var(--border);
-  }
+  section { padding: 60px 0; border-bottom: 1px solid var(--border); }
   section:last-child { border-bottom: none; }
 
   .section-label {
@@ -110,12 +91,7 @@
     align-items: center;
     gap: 12px;
   }
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
   h2 {
     font-family: 'Noto Serif JP', serif;
@@ -125,24 +101,9 @@
     line-height: 1.4;
   }
 
-  h3 {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    margin-bottom: 12px;
-  }
+  p { font-size: 15px; margin-bottom: 16px; color: #3a3630; }
 
-  p {
-    font-size: 15px;
-    margin-bottom: 16px;
-    color: #3a3630;
-  }
-
-  a {
-    color: var(--step-b);
-    text-decoration: underline;
-    font-size: inherit;
-  }
+  a { color: var(--step-b); text-decoration: underline; }
   a:hover { color: var(--accent); }
 
   /* ── HYPOTHESIS ── */
@@ -160,29 +121,23 @@
     color: var(--accent);
     opacity: 0.3;
     position: absolute;
-    top: -20px;
-    left: 32px;
+    top: -20px; left: 32px;
     line-height: 1;
   }
   .hypothesis p {
     font-family: 'Noto Serif JP', serif;
     font-size: clamp(16px, 2.5vw, 20px);
     color: var(--paper);
-    position: relative;
-    z-index: 1;
-    line-height: 1.7;
-    margin: 0;
+    position: relative; z-index: 1;
+    line-height: 1.7; margin: 0;
   }
   .hypothesis strong { color: #f0a080; }
 
   /* ── FLOW ── */
   .flow { display: flex; flex-direction: column; margin: 32px 0; }
   .flow-item {
-    display: flex;
-    align-items: flex-start;
-    padding: 20px 0;
+    padding: 20px 0 20px 28px;
     border-left: 2px solid var(--border);
-    padding-left: 28px;
     position: relative;
   }
   .flow-item::before {
@@ -196,36 +151,174 @@
   .flow-item:last-child { border-left: 2px solid transparent; }
   .flow-text { font-size: 15px; color: #3a3630; }
 
-  /* ── STEPS GRID ── */
-  .steps-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin: 32px 0;
-  }
+  /* ── STEPS ── */
+  .steps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 32px 0; }
   @media (max-width: 600px) { .steps-grid { grid-template-columns: 1fr; } }
 
-  .step-card {
-    padding: 28px 32px;
-    position: relative;
-    overflow: hidden;
-  }
+  .step-card { padding: 28px 32px; position: relative; overflow: hidden; }
   .step-card.a { background: var(--step-a); color: white; }
   .step-card.b { background: var(--step-b); color: white; }
   .step-card .step-num {
     font-family: 'DM Mono', monospace;
-    font-size: 64px;
-    font-weight: 500;
+    font-size: 64px; font-weight: 500;
     opacity: 0.15;
-    position: absolute;
-    right: 16px; top: 8px;
-    line-height: 1;
+    position: absolute; right: 16px; top: 8px; line-height: 1;
   }
   .step-card h3 { color: white; font-size: 13px; letter-spacing: 0.1em; margin-bottom: 8px; opacity: 0.7; text-transform: uppercase; }
   .step-card p { color: rgba(255,255,255,0.9); font-size: 17px; font-family: 'Noto Serif JP', serif; margin: 0; }
 
+  /* ── REAL CASE CARDS (大) ── */
+  .real-cases { display: flex; flex-direction: column; gap: 32px; margin: 32px 0; }
+
+  .real-card {
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .real-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 5px; height: 100%;
+    background: var(--accent);
+  }
+
+  .real-card-header {
+    padding: 24px 28px 18px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .real-card-header h3 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .src-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 3px 9px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .real-card-body { padding: 20px 28px 24px 32px; }
+
+  .metrics-row {
+    display: flex;
+    gap: 0;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+  .metric-box {
+    background: var(--ink);
+    color: white;
+    padding: 14px 20px;
+    text-align: center;
+    min-width: 110px;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    flex: 1;
+  }
+  .metric-box:last-child { border-right: none; }
+  .metric-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    color: #f0a080;
+    display: block;
+    line-height: 1;
+    margin-bottom: 5px;
+  }
+  .metric-label {
+    font-size: 11px;
+    opacity: 0.7;
+    line-height: 1.3;
+    display: block;
+  }
+  @media (max-width: 600px) {
+    .metrics-row { flex-direction: column; }
+    .metric-box { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  }
+
+  .what-box {
+    background: #f0f4f8;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #2a3a4a;
+  }
+
+  .result-bar {
+    background: var(--accent-light);
+    border-left: 3px solid var(--accent);
+    padding: 10px 16px;
+    font-size: 14px;
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    margin-top: 14px;
+  }
+
+  .src-link {
+    margin-top: 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .src-link a { font-size: 11px; }
+
+  /* ── NOTE CASES GRID ── */
+  .note-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 32px 0;
+  }
+  @media (max-width: 600px) { .note-grid { grid-template-columns: 1fr; } }
+
+  .note-card {
+    border: 1px solid var(--border);
+    padding: 22px 24px;
+  }
+  .note-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--note-color);
+    color: white;
+    padding: 3px 8px;
+    display: inline-block;
+    margin-bottom: 12px;
+  }
+  .note-card h4 {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .note-card h4 a { font-size: 14px; color: var(--ink); }
+  .note-card h4 a:hover { color: var(--accent); }
+  .note-card p { font-size: 13px; color: var(--muted); margin: 0; line-height: 1.7; }
+  .note-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    margin-top: 8px;
+    display: block;
+  }
+
   /* ── TOOL CARDS ── */
-  .tools { display: flex; flex-direction: column; gap: 40px; margin: 32px 0; }
+  .tools { display: flex; flex-direction: column; gap: 32px; margin: 32px 0; }
 
   .tool-card {
     border: 1px solid var(--border);
@@ -244,7 +337,7 @@
   .tool-card.t4::before { background: var(--tool-4); }
 
   .tool-header {
-    padding: 24px 32px 20px;
+    padding: 20px 28px 18px 32px;
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: flex-start;
@@ -260,14 +353,14 @@
     padding: 4px 10px;
     color: white;
     display: inline-block;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
   .tool-card.t1 .tool-tag { background: var(--tool-1); }
   .tool-card.t2 .tool-tag { background: var(--tool-2); }
   .tool-card.t3 .tool-tag { background: var(--tool-3); }
   .tool-card.t4 .tool-tag { background: var(--tool-4); }
 
-  .difficulty-badge {
+  .diff-badge {
     font-family: 'DM Mono', monospace;
     font-size: 11px;
     padding: 4px 10px;
@@ -278,23 +371,22 @@
 
   .tool-header h3 {
     font-family: 'Noto Serif JP', serif;
-    font-size: 19px;
+    font-size: 18px;
     font-weight: 700;
     margin: 0;
     line-height: 1.4;
   }
 
-  .tool-body { padding: 24px 32px; }
+  .tool-body { padding: 20px 28px 24px 32px; }
 
   .tool-meta {
     display: flex;
-    gap: 0;
-    margin: 20px 0;
     border: 1px solid var(--border);
+    margin: 18px 0;
   }
   .tool-meta-item {
     flex: 1;
-    padding: 14px 16px;
+    padding: 12px 14px;
     border-right: 1px solid var(--border);
     text-align: center;
   }
@@ -306,11 +398,11 @@
     text-transform: uppercase;
     color: var(--muted);
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
   }
   .meta-value {
     font-family: 'DM Mono', monospace;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     color: var(--ink);
     display: block;
@@ -322,83 +414,55 @@
     .tool-meta-item:last-child { border-bottom: none; }
   }
 
-  .how-it-works {
-    background: #f0f4f8;
+  .how-steps {
+    background: #f0f4f0;
     padding: 16px 20px;
-    margin: 16px 0;
+    margin: 14px 0;
     font-size: 14px;
   }
-  .how-it-works .step-line {
+  .how-step {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
-    padding: 4px 0;
-    color: #3a3630;
+    padding: 3px 0;
+    color: #2a3a2a;
   }
-  .step-arrow {
-    color: var(--accent);
-    font-weight: bold;
-    flex-shrink: 0;
-  }
+  .step-arrow { color: var(--step-a); font-weight: bold; flex-shrink: 0; }
 
   .fc-box {
     background: var(--accent-light);
     border-left: 3px solid var(--accent);
     padding: 12px 16px;
-    margin-top: 16px;
+    margin-top: 14px;
     font-size: 14px;
     color: #5a2010;
   }
   .fc-box strong { color: var(--accent); }
 
-  .source-link {
-    margin-top: 16px;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-  }
-  .source-link a { font-size: 11px; }
-
   /* ── COMPARISON TABLE ── */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 24px 0;
-    font-size: 13px;
-  }
+  table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 13px; }
   th {
     background: var(--ink);
     color: var(--paper);
-    padding: 12px 16px;
+    padding: 11px 16px;
     text-align: left;
     font-weight: 400;
     font-family: 'DM Mono', monospace;
     font-size: 10px;
     letter-spacing: 0.1em;
   }
-  td {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    vertical-align: top;
-    line-height: 1.6;
-  }
+  td { padding: 11px 16px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.6; }
   tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
-  td:first-child { font-weight: 500; white-space: nowrap; }
+  td:first-child { font-weight: 500; }
 
   /* ── ROADMAP ── */
   .roadmap { display: flex; flex-direction: column; margin: 32px 0; }
-  .roadmap-item {
-    display: flex;
-    gap: 24px;
-    padding-bottom: 32px;
-    position: relative;
-  }
+  .roadmap-item { display: flex; gap: 24px; padding-bottom: 32px; position: relative; }
   .roadmap-item::after {
     content: '';
     position: absolute;
     left: 19px; top: 40px; bottom: 0;
-    width: 2px;
-    background: var(--border);
+    width: 2px; background: var(--border);
   }
   .roadmap-item:last-child::after { display: none; }
   .roadmap-num {
@@ -406,176 +470,29 @@
     border-radius: 50%;
     background: var(--accent);
     color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     font-family: 'DM Mono', monospace;
     font-size: 14px;
     flex-shrink: 0;
-    position: relative;
-    z-index: 1;
+    position: relative; z-index: 1;
   }
-  .roadmap-content h3 {
-    font-size: 15px;
-    font-weight: 500;
-    padding-top: 8px;
-    margin-bottom: 6px;
-  }
+  .roadmap-content h3 { font-size: 15px; font-weight: 500; padding-top: 8px; margin-bottom: 6px; }
   .roadmap-content p { font-size: 13px; color: var(--muted); margin: 0; }
   .roadmap-tool {
-    display: inline-block;
-    margin-top: 8px;
+    display: inline-block; margin-top: 8px;
     font-family: 'DM Mono', monospace;
     font-size: 11px;
-    background: var(--ink);
-    color: var(--paper);
+    background: var(--ink); color: var(--paper);
     padding: 3px 8px;
   }
   .roadmap-obstacle {
-    margin-top: 8px;
-    font-size: 12px;
+    margin-top: 8px; font-size: 12px;
     color: var(--warning);
     font-family: 'DM Mono', monospace;
     background: var(--warning-bg);
     padding: 6px 10px;
     border-left: 2px solid var(--warning);
   }
-
-  /* ── START BOX ── */
-  .start-box {
-    background: var(--step-a);
-    color: white;
-    padding: 40px 48px;
-    margin: 32px 0;
-    text-align: center;
-  }
-  .start-box h3 {
-    font-family: 'Noto Serif JP', serif;
-    font-size: 22px;
-    color: white;
-    margin-bottom: 16px;
-  }
-  .start-box p {
-    color: rgba(255,255,255,0.85);
-    font-size: 15px;
-    margin-bottom: 8px;
-  }
-  .start-steps {
-    display: flex;
-    justify-content: center;
-    gap: 0;
-    margin-top: 24px;
-    flex-wrap: wrap;
-  }
-  .start-step {
-    padding: 16px 20px;
-    border-right: 1px solid rgba(255,255,255,0.2);
-    text-align: center;
-    min-width: 120px;
-  }
-  .start-step:last-child { border-right: none; }
-  .start-step .s-num {
-    font-family: 'DM Mono', monospace;
-    font-size: 24px;
-    font-weight: 500;
-    color: #a0f0c8;
-    display: block;
-    line-height: 1;
-    margin-bottom: 6px;
-  }
-  .start-step .s-label {
-    font-size: 12px;
-    color: rgba(255,255,255,0.8);
-    line-height: 1.4;
-  }
-
-  /* ── REAL CASES ── */
-  .real-cases { display: flex; flex-direction: column; gap: 20px; margin: 32px 0; }
-
-  .real-case {
-    border: 1px solid var(--border);
-    padding: 24px 28px;
-    position: relative;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 0 20px;
-    align-items: start;
-  }
-
-  .platform-badge {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 3px 8px;
-    color: white;
-    border-radius: 2px;
-    white-space: nowrap;
-    margin-top: 2px;
-    display: inline-block;
-  }
-  .platform-badge.zenn   { background: var(--zenn); }
-  .platform-badge.qiita  { background: var(--qiita); }
-  .platform-badge.note   { background: var(--note); }
-  .platform-badge.x      { background: var(--x); }
-
-  .real-case-body h4 {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 6px;
-    line-height: 1.5;
-  }
-  .real-case-body h4 a { font-size: 14px; color: var(--ink); }
-  .real-case-body h4 a:hover { color: var(--accent); }
-
-  .real-case-body p {
-    font-size: 13px;
-    color: var(--muted);
-    margin: 0 0 8px;
-    line-height: 1.7;
-  }
-
-  .real-case-meta {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .real-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    border: 1px solid var(--border);
-    padding: 2px 7px;
-    color: var(--muted);
-  }
-  .real-result {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    background: var(--accent-light);
-    border-left: 2px solid var(--accent);
-    padding: 4px 10px;
-    color: var(--accent);
-    margin-top: 8px;
-    display: inline-block;
-  }
-
-  .cases-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin: 32px 0;
-  }
-  @media (max-width: 620px) { .cases-grid { grid-template-columns: 1fr; } }
-
-  .mini-case {
-    border: 1px solid var(--border);
-    padding: 20px 22px;
-  }
-  .mini-case .platform-badge { margin-bottom: 10px; }
-  .mini-case h4 { font-size: 13px; font-weight: 500; margin-bottom: 6px; line-height: 1.5; }
-  .mini-case h4 a { font-size: 13px; color: var(--ink); }
-  .mini-case p { font-size: 12px; color: var(--muted); margin: 0; line-height: 1.7; }
 
   /* ── FOOTER ── */
   footer {
@@ -588,7 +505,6 @@
     border-top: 1px solid var(--border);
   }
 
-  /* ── ANIMATIONS ── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -596,17 +512,15 @@
   .fade-in { animation: fadeUp 0.6s ease forwards; opacity: 0; }
   .delay-1 { animation-delay: 0.1s; }
   .delay-2 { animation-delay: 0.2s; }
-  .delay-3 { animation-delay: 0.3s; }
 </style>
 </head>
 <body>
 
 <header>
   <div class="container">
-    <div class="header-label fade-in">FC本部 × AI活用 実装ガイド</div>
-    <h1 class="fade-in delay-1">加盟店教育コスト削減を<br>一般エンジニアが実装する</h1>
-    <div class="subtitle fade-in delay-2">課題仮説 → 2段階アプローチ → 実装パターン4選 → スモールスタート</div>
-    <div class="version-badge fade-in delay-3">Google Workspace / Dify / n8n / Claude API 対応版</div>
+    <div class="header-label fade-in">FC本部 × AI活用 調査レポート</div>
+    <h1 class="fade-in delay-1">加盟店教育コスト削減<br>AI活用の実態と実装アイデア</h1>
+    <div class="subtitle fade-in delay-2">ボトルネック仮説 → 他チェーンの実績 → note現場の声 → 実装パターン</div>
   </div>
 </header>
 
@@ -616,7 +530,7 @@
   <div class="container">
     <div class="section-label">ボトルネック仮説</div>
     <h2>なぜ教育コストは下がらないのか</h2>
-    <p>SVの数・研修の頻度・教材の量——問題はそこではない。根本にある構造はこうだ。</p>
+    <p>SVの数、研修の頻度、マニュアルの量——問題はそこではない。根本にある構造はこうだ。</p>
 
     <div class="hypothesis fade-in">
       <p>「教えるコストではなく、<strong>ナレッジが人の頭の中にしかないこと</strong>がコストを生んでいる」</p>
@@ -627,22 +541,12 @@
         <div class="flow-text">ナレッジが標準化されていない（SVや本部担当者の頭の中にある）</div>
       </div>
       <div class="flow-item">
-        <div class="flow-text">SVや本部担当者が直接説明するしかない → 人数に比例してコストが増える</div>
+        <div class="flow-text">SVや本部担当者が直接説明するしかない → 加盟店が増えるほどコストが比例して増える</div>
       </div>
       <div class="flow-item">
-        <div class="flow-text">加盟店が増えるほど・スタッフが辞めるほど、人件費が積み上がり続ける</div>
+        <div class="flow-text">スタッフが辞めるたびに最初から教え直す → 永続的なコスト要因になる</div>
       </div>
     </div>
-    <p style="color: var(--muted); font-size: 14px;">AIをどこに入れても、この根本が解決されていなければ焼け石に水になる。逆に「ナレッジを構造化・データ化する」ことができれば、AIはその展開コストをほぼゼロにできる。</p>
-  </div>
-</section>
-
-
-<!-- TWO STEPS -->
-<section>
-  <div class="container">
-    <div class="section-label">解き方の構造</div>
-    <h2>2段階のアプローチ</h2>
 
     <div class="steps-grid">
       <div class="step-card a">
@@ -656,85 +560,229 @@
         <p>形式知を<br>AIでスケールさせる</p>
       </div>
     </div>
-
-    <p style="color: var(--muted); font-size: 14px; margin-top: 8px;">
-      ⚠ よくある失敗：Step Aをスキップしていきなりチャットボットを入れる → ナレッジの質が低く、加盟店に使われない。<br>
-      まずSVのノウハウをスプレッドシート・ドキュメントに書き出すことが第一歩。それさえ揃えば、以下のツールで誰でもAI化できる。
-    </p>
+    <p style="font-size:13px; color:var(--muted);">⚠ Step Aをスキップしていきなりbotを入れると、低品質なナレッジをAIが展開するだけになり現場の信頼を失う。まず「何を教えるか」をデータ化することが先決。</p>
   </div>
 </section>
 
 
-<!-- TOOL PATTERNS -->
+<!-- REAL CASES: FC CHAINS -->
 <section>
   <div class="container">
-    <div class="section-label">実装パターン4選</div>
-    <h2>一般エンジニアが実際に作れる構成</h2>
-    <p>大企業の専任チームや大規模予算は不要。以下はどれも <strong>数時間〜1日で動くもの</strong> が作れる。</p>
+    <div class="section-label">他チェーンの実績（数値あり）</div>
+    <h2>FC・多店舗チェーンが実際に出した結果</h2>
+    <p>「本当に効果が出るのか」という疑問への答えとして、公式発表・報道ベースの事例を並べる。</p>
 
-    <div class="tools">
+    <div class="real-cases">
 
-      <!-- PATTERN 1: Google Workspace + Gemini -->
-      <div class="tool-card t1">
-        <div class="tool-header">
+      <!-- ファミリーマート -->
+      <div class="real-card">
+        <div class="real-card-header">
           <div>
-            <span class="tool-tag">Pattern 01｜最小コスト</span>
-            <h3>Google Workspace + Gemini API<br>（Apps Script）</h3>
+            <h3>ファミリーマート｜AIマニュアル音声検索</h3>
           </div>
-          <span class="difficulty-badge">難易度 ★☆☆</span>
+          <span class="src-badge">日経新聞 / 公式PR 2024年8月</span>
         </div>
-        <div class="tool-body">
-          <p>すでにGoogleスプレッドシートやGoogleドライブを使っている環境に、Apps Script（GoogleのJavaScript実行環境）でGemini APIを叩くだけ。追加のサーバーも不要。</p>
-
-          <div class="tool-meta">
-            <div class="tool-meta-item">
-              <span class="meta-label">構築時間</span>
-              <span class="meta-value">1〜2時間</span>
+        <div class="real-card-body">
+          <div class="metrics-row">
+            <div class="metric-box">
+              <span class="metric-num">1/3</span>
+              <span class="metric-label">マニュアル検索<br>時間を短縮</span>
             </div>
-            <div class="tool-meta-item">
-              <span class="meta-label">月額コスト</span>
-              <span class="meta-value">無料〜<br>数百円</span>
-            </div>
-            <div class="tool-meta-item">
-              <span class="meta-label">無料枠</span>
-              <span class="meta-value">60 req/分<br>まで無料</span>
-            </div>
-            <div class="tool-meta-item">
-              <span class="meta-label">必要スキル</span>
-              <span class="meta-value">JavaScript<br>基礎</span>
+            <div class="metric-box">
+              <span class="metric-num">7,000店</span>
+              <span class="metric-label">展開済み<br>（2024年7月末）</span>
             </div>
           </div>
 
-          <div class="how-it-works">
-            <div class="step-line"><span class="step-arrow">①</span> GoogleスプレッドシートにSVのFAQ（質問・回答）を入力</div>
-            <div class="step-line"><span class="step-arrow">↓</span></div>
-            <div class="step-line"><span class="step-arrow">②</span> Apps ScriptでGemini APIを呼び出し、シートの内容を元に回答生成</div>
-            <div class="step-line"><span class="step-arrow">↓</span></div>
-            <div class="step-line"><span class="step-arrow">③</span> Googleチャットのbotとして加盟店に公開 → 24時間自動応答</div>
+          <div class="what-box">
+            人型AIアシスタント「レイチェル／アキラ」に生成AIを搭載。レジ操作・スタッフ育成・機器操作・労務管理・緊急時対応などの業務マニュアルを<strong>音声で検索・回答</strong>できるシステムを導入。従来は担当者に電話して聞くか、分厚いマニュアルを手で探していた。
           </div>
 
-          <div class="fc-box">
-            <strong>FC転用イメージ：</strong>加盟店がGoogleチャットで「レジ締め手順は？」と送ると、スプレッドシートのFAQを元にAIが即答。SVへの電話が不要になる。
-          </div>
-
-          <div class="source-link">
-            公式チュートリアル：<a href="https://developers.google.com/workspace/add-ons/samples/tutorial-ai-knowledge-assistant" target="_blank">Google Chat × Gemini AI Knowledge Assistant</a>
-            ／ <a href="https://codelabs.developers.google.com/codelabs/chat-apps-gemini" target="_blank">Google Codelab（日本語対応）</a>
+          <div class="result-bar">→ マニュアル検索時間を従来の3分の1に短縮。7,000店舗に一括展開済み</div>
+          <div class="src-link">
+            出典：<a href="https://www.nikkei.com/article/DGXZQOUC193G00Z10C24A7000000/" target="_blank">日本経済新聞</a>
+            ／ <a href="https://www.family.co.jp/company/news_releases/2024/20240802_01.html" target="_blank">ファミリーマート公式</a>
+            ／ <a href="https://prtimes.jp/main/html/rd/p/000000033.000033615.html" target="_blank">PR TIMES（クーガー社）</a>
           </div>
         </div>
       </div>
 
-      <!-- PATTERN 2: Dify -->
-      <div class="tool-card t2">
+      <!-- 松屋フーズ -->
+      <div class="real-card">
+        <div class="real-card-header">
+          <div>
+            <h3>松屋フーズ｜VR研修で新人教育を全店展開</h3>
+          </div>
+          <span class="src-badge">Mogura VR / PR TIMES</span>
+        </div>
+        <div class="real-card-body">
+          <div class="metrics-row">
+            <div class="metric-box">
+              <span class="metric-num">60h削減</span>
+              <span class="metric-label">1人あたりの<br>教育時間</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-num">3h→30分</span>
+              <span class="metric-label">店長の<br>初回OJT時間</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-num">1,000店+</span>
+              <span class="metric-label">全国展開<br>店舗数</span>
+            </div>
+          </div>
+
+          <div class="what-box">
+            調理・券売機・トラブル対応・セルフ接客などのOJTをVR化。店長がつきっきりで教えていた初回オリエンテーションを30分以下に短縮。ベトナム語・中国語にも対応し、外国籍スタッフの教育コストも削減。スタッフの入れ替わりが多い多店舗FCで特に効果的。
+          </div>
+
+          <div class="result-bar">→ 店長のトレーナー実働時間が3時間→30分以下。1人あたりの習熟時間を約60時間削減</div>
+          <div class="src-link">
+            出典：<a href="https://www.moguravr.com/matsuya-foods-vr-training/" target="_blank">Mogura VR</a>
+            ／ <a href="https://prtimes.jp/main/html/rd/p/000000552.000012383.html" target="_blank">PR TIMES（松屋フーズ）</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- KFC -->
+      <div class="real-card">
+        <div class="real-card-header">
+          <div>
+            <h3>KFC（ケンタッキーフライドチキン）｜VR調理研修</h3>
+          </div>
+          <span class="src-badge">各メディア報道</span>
+        </div>
+        <div class="real-card-body">
+          <div class="metrics-row">
+            <div class="metric-box">
+              <span class="metric-num">60%削減</span>
+              <span class="metric-label">研修時間<br>短縮率</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-num">25分→10分</span>
+              <span class="metric-label">フライドチキン<br>調理研修時間</span>
+            </div>
+          </div>
+
+          <div class="what-box">
+            フライドチキンの調理方法をVR化して研修。熟練トレーナーがつきっきりで教える方式からVR自習方式に移行。研修時間を60%削減しながら習熟度は維持。多店舗・多国籍スタッフへのスケーラブルな展開が可能になった。
+          </div>
+
+          <div class="result-bar">→ 研修時間を25分→10分（60%削減）。トレーナー工数をスタッフ増加に比例させずに済む</div>
+        </div>
+      </div>
+
+      <!-- パーソルテンプスタッフ -->
+      <div class="real-card">
+        <div class="real-card-header">
+          <div>
+            <h3>パーソルテンプスタッフ｜社内チャットbot（6,000名規模）</h3>
+          </div>
+          <span class="src-badge">ユーザーローカル導入事例</span>
+        </div>
+        <div class="real-card-body">
+          <div class="metrics-row">
+            <div class="metric-box">
+              <span class="metric-num">95%削減</span>
+              <span class="metric-label">確認電話の<br>発生件数</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-num">30分→1分</span>
+              <span class="metric-label">情報検索<br>にかかる時間</span>
+            </div>
+          </div>
+
+          <div class="what-box">
+            全国6,000名規模の多拠点組織でAIチャットbotを導入。「確認のために電話する」という行動をbotが代替。情報検索にかかっていた30分が1分に短縮され、業務担当者への確認電話も95%削減された。FC本部とSVの関係に直接転用可能な構成。
+          </div>
+
+          <div class="result-bar">→ 情報検索30分→1分、確認電話95%削減。SVへの「ちょっと聞いていいですか」が激減</div>
+          <div class="src-link">
+            参考：<a href="https://admina.moneyforward.com/jp/blog/internal-chatbot-case-studies-10" target="_blank">社内チャットbot事例まとめ</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- NOTE CASES -->
+<section>
+  <div class="container">
+    <div class="section-label">note・現場の声</div>
+    <h2>実務者・経営者がnoteに書いた「やってみた」</h2>
+    <p>大手チェーンではなく、中小規模の飲食店・多店舗経営者・DX担当者が自ら試して投稿した記事。FC加盟店の現実に近い事例。</p>
+
+    <div class="note-grid">
+
+      <div class="note-card">
+        <span class="note-label">note — 飲食店経営者</span>
+        <h4><a href="https://note.com/bn_akanuma/n/n6ab89423c86a" target="_blank">読まれないマニュアルが劇的に変わる！AIで作る「実質無料」のスタッフ教育術</a></h4>
+        <p>ChatGPT + Gammaを使って飲食店スタッフ向け教育マニュアルをスライド化。「作る工数がかかりすぎて更新できない」問題をAIで解決した実践記。</p>
+        <span class="note-num">→ 実質無料でマニュアルをスライド教材に変換</span>
+      </div>
+
+      <div class="note-card">
+        <span class="note-label">note — NANOHA.ai</span>
+        <h4><a href="https://note.com/nanoha_aibiz/n/n7d91be1f1a69" target="_blank">アルバイト教育マニュアル作成が面倒すぎる。AIに丸投げしたら2時間で完璧なものができた</a></h4>
+        <p>開店準備・接客・レジ・クレーム対応・閉店作業を含む完全マニュアルをChatGPTに作らせた実験記。従来は数日かかっていた作業が2時間で完了。</p>
+        <span class="note-num">→ 数日→2時間でマニュアル完成</span>
+      </div>
+
+      <div class="note-card">
+        <span class="note-label">note — ねもたく（企業AI参謀）</span>
+        <h4><a href="https://note.com/nemoto_itceo/n/nae4c2f20566b" target="_blank">教育コストを大幅削減｜AIで社員研修・マニュアル・FAQ対応を仕組み化する実践ガイド</a></h4>
+        <p>Gemini + NotebookLM を使った社員教育の仕組み化を解説。マニュアル自動生成・対話型FAQ・クイズによる知識定着テストをAIが代替する構成。</p>
+        <span class="note-num">→ マニュアル作成：半日〜1日 → 10〜20分に短縮</span>
+      </div>
+
+      <div class="note-card">
+        <span class="note-label">note — 上場企業のAI責任者</span>
+        <h4><a href="https://note.com/ai_sales/n/nfefdf904cc69" target="_blank">もうマニュアル作成に時間はかけない！AIで録画から画像付き手順書を自動生成</a></h4>
+        <p>PC操作を動画録画 → ChatGPTエージェントモードで画像付きWord形式マニュアルを自動生成。「やり方を見せてもらい文字に起こす」工程をAIが全自動化。</p>
+        <span class="note-num">→ 操作動画を録るだけで手順書が自動完成</span>
+      </div>
+
+      <div class="note-card">
+        <span class="note-label">note — いわさき</span>
+        <h4><a href="https://note.com/sukiyaki_fan/n/n94cfa0b300de" target="_blank">社内マニュアルの迷子を解消するAIチャットボット：開発からテストまでの道のり</a></h4>
+        <p>Googleドライブと連携した社内マニュアル自動検索チャットbotの開発記録。「どのファイルに書いてあるか分からない」問題をAI検索で解決。</p>
+        <span class="note-num">→ Googleドライブの既存資料をそのままbot化</span>
+      </div>
+
+      <div class="note-card">
+        <span class="note-label">note — u.m.a.u.m.a（飲食×AI）</span>
+        <h4><a href="https://note.com/witty_ixora1236/n/n093ff6381cb6" target="_blank">飲食店こそAIを使い倒せ！ChatGPT×業務改善で"1人分の働き"を増やす術</a></h4>
+        <p>飲食店経営者目線でのChatGPT活用。スタッフ教育チェックリスト・急な欠勤対応マニュアル・クレーム対応フローをAIで自動生成する方法を実践的に解説。</p>
+        <span class="note-num">→ 教育チェックリスト・対応マニュアルをAI自動生成</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- IMPLEMENTATION PATTERNS -->
+<section>
+  <div class="container">
+    <div class="section-label">実装パターン4選</div>
+    <h2>FC本部が実際に作れる構成</h2>
+    <p>上記の事例を踏まえて、一般的なエンジニアが数時間〜1日で構築できる4パターンを整理した。いずれも大規模インフラ不要。</p>
+
+    <div class="tools">
+
+      <!-- PATTERN 1 -->
+      <div class="tool-card t1">
         <div class="tool-header">
           <div>
-            <span class="tool-tag">Pattern 02｜最速構築</span>
-            <h3>Dify（ノーコードRAGプラットフォーム）</h3>
+            <span class="tool-tag">Pattern 01｜最速・最小コスト</span>
+            <h3>Dify + マニュアルPDF<br>加盟店向けQ&Aチャットbot</h3>
           </div>
-          <span class="difficulty-badge">難易度 ★☆☆</span>
+          <span class="diff-badge">難易度 ★☆☆ コード不要</span>
         </div>
         <div class="tool-body">
-          <p>コードを一切書かずにRAGチャットボットが作れるオープンソースツール。PDFや Wordファイルをアップロードするだけでナレッジベース完成。GUIで操作するだけで「社内FAQ bot」が1日で動く。</p>
+          <p>ファミリーマートが実現した「マニュアルを検索して即回答」を、小規模FCでも再現できる構成。SVのマニュアルPDFをDifyにアップロードするだけで動く。</p>
 
           <div class="tool-meta">
             <div class="tool-meta-item">
@@ -743,51 +791,86 @@
             </div>
             <div class="tool-meta-item">
               <span class="meta-label">月額コスト</span>
-              <span class="meta-value">無料〜<br>$59/月</span>
-            </div>
-            <div class="tool-meta-item">
-              <span class="meta-label">無料枠</span>
-              <span class="meta-value">200 msg/月<br>（検証十分）</span>
+              <span class="meta-value">無料〜$59</span>
             </div>
             <div class="tool-meta-item">
               <span class="meta-label">必要スキル</span>
-              <span class="meta-value">コード<br>不要</span>
+              <span class="meta-value">コード不要</span>
             </div>
           </div>
 
-          <div class="how-it-works">
-            <div class="step-line"><span class="step-arrow">①</span> Difyにサインアップ（無料）</div>
-            <div class="step-line"><span class="step-arrow">↓</span></div>
-            <div class="step-line"><span class="step-arrow">②</span> 「ナレッジ」タブにSVのマニュアルPDF・FAQ・対応メモをアップロード</div>
-            <div class="step-line"><span class="step-arrow">↓</span></div>
-            <div class="step-line"><span class="step-arrow">③</span> 「チャットボット」アプリを作成しナレッジと紐付け → 公開URLをコピー</div>
-            <div class="step-line"><span class="step-arrow">↓</span></div>
-            <div class="step-line"><span class="step-arrow">④</span> 加盟店にURLを共有するだけで運用開始</div>
+          <div class="how-steps">
+            <div class="how-step"><span class="step-arrow">①</span> Dify（無料）にサインアップ</div>
+            <div class="how-step"><span class="step-arrow">②</span> 「ナレッジ」タブにSVのマニュアルPDF・FAQ・対応メモをアップロード</div>
+            <div class="how-step"><span class="step-arrow">③</span> チャットbotアプリを作成しナレッジと紐付け</div>
+            <div class="how-step"><span class="step-arrow">④</span> 加盟店に公開URLを共有 → 24時間Q&A対応開始</div>
           </div>
 
           <div class="fc-box">
-            <strong>FC転用イメージ：</strong>15名規模のサービス会社での導入事例では、定型問い合わせが約50%削減。スタッフが本来業務に集中できるようになった。PDFをアップするだけなのでITが得意でないSVでも更新可能。
+            <strong>FC転用効果の目安：</strong>パーソルテンプスタッフの事例と同様の構成で、確認電話95%削減・検索時間1/3短縮が期待できる。Dify無料枠（200メッセージ/月）でPoCに十分。
           </div>
 
-          <div class="source-link">
+          <div class="src-link">
             参考記事：<a href="https://sophiate.co.jp/why-you-can-build-an-internal-faq-bot-in-just-one-day-with-rag-and-dify/" target="_blank">社内FAQボットを1日で作る！RAG×Difyで業務効率化</a>
-            ／ <a href="https://zenn.dev/acntechjp/articles/0b2891bbcb6152" target="_blank">Zenn：DifyでRAGチャットボットを構築する</a>
-            ／ <a href="https://dify.ai" target="_blank">Dify公式</a>
+            ／ <a href="https://qiita.com/shivixay_souza/items/718b0e08b848e15d31b1" target="_blank">店舗からの問い合わせに答えるチャットbot（Qiita）</a>
           </div>
         </div>
       </div>
 
-      <!-- PATTERN 3: n8n + Google Drive + Gemini -->
+      <!-- PATTERN 2 -->
+      <div class="tool-card t2">
+        <div class="tool-header">
+          <div>
+            <span class="tool-tag">Pattern 02｜Google環境で完結</span>
+            <h3>Google Workspace + Gemini API<br>（Apps Script）</h3>
+          </div>
+          <span class="diff-badge">難易度 ★★☆ JS基礎必要</span>
+        </div>
+        <div class="tool-body">
+          <p>すでにGoogleスプレッドシート・Googleドライブを使っている環境なら追加のサービス契約不要。Apps ScriptでGemini APIを呼ぶだけ。Googleチャット経由で加盟店に展開できる。</p>
+
+          <div class="tool-meta">
+            <div class="tool-meta-item">
+              <span class="meta-label">構築時間</span>
+              <span class="meta-value">1〜2時間</span>
+            </div>
+            <div class="tool-meta-item">
+              <span class="meta-label">月額コスト</span>
+              <span class="meta-value">無料〜数百円</span>
+            </div>
+            <div class="tool-meta-item">
+              <span class="meta-label">無料枠</span>
+              <span class="meta-value">60 req/分</span>
+            </div>
+          </div>
+
+          <div class="how-steps">
+            <div class="how-step"><span class="step-arrow">①</span> GoogleスプレッドシートにSVのFAQ（質問・回答）を入力</div>
+            <div class="how-step"><span class="step-arrow">②</span> Apps ScriptでGemini APIを呼び出し、シートを元に回答生成</div>
+            <div class="how-step"><span class="step-arrow">③</span> Googleチャットのbotとして加盟店に公開</div>
+          </div>
+
+          <div class="fc-box">
+            <strong>FC転用効果の目安：</strong>「ねもたく」noteの事例と同等の構成。マニュアル作成・FAQ自動応答・知識定着クイズまで同じ環境で実現できる。
+          </div>
+
+          <div class="src-link">
+            公式チュートリアル：<a href="https://developers.google.com/workspace/add-ons/samples/tutorial-ai-knowledge-assistant" target="_blank">Google Chat × Gemini AI Knowledge Assistant</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- PATTERN 3 -->
       <div class="tool-card t3">
         <div class="tool-header">
           <div>
-            <span class="tool-tag">Pattern 03｜自動連携</span>
-            <h3>n8n + Google Drive + Gemini<br>（ワークフロー自動化）</h3>
+            <span class="tool-tag">Pattern 03｜Googleドライブを自動RAG化</span>
+            <h3>n8n + Google Drive + Gemini<br>（ファイル更新で自動同期）</h3>
           </div>
-          <span class="difficulty-badge">難易度 ★★☆</span>
+          <span class="diff-badge">難易度 ★★☆ ノーコード操作</span>
         </div>
         <div class="tool-body">
-          <p>すでにGoogleドライブにある操作マニュアル・議事録・FAQ資料をそのままRAGのナレッジ源として利用できる。n8nのテンプレートを使えば設定はドラッグ&ドロップのみ。ドライブのファイルが更新されると自動でナレッジも更新される。</p>
+          <p>既存のGoogleドライブにある操作マニュアル・議事録・FAQ資料をそのままRAGのナレッジ源として利用。ドライブのファイルを更新すれば、botの回答も自動で最新化される。</p>
 
           <div class="tool-meta">
             <div class="tool-meta-item">
@@ -796,48 +879,42 @@
             </div>
             <div class="tool-meta-item">
               <span class="meta-label">月額コスト</span>
-              <span class="meta-value">n8n無料<br>+ API代</span>
+              <span class="meta-value">n8n無料<br>+API代</span>
             </div>
             <div class="tool-meta-item">
               <span class="meta-label">API費用目安</span>
               <span class="meta-value">1,000問/月<br>約500〜1,000円</span>
             </div>
-            <div class="tool-meta-item">
-              <span class="meta-label">必要スキル</span>
-              <span class="meta-value">ノーコード<br>操作</span>
-            </div>
           </div>
 
-          <div class="how-it-works">
-            <div class="step-line"><span class="step-arrow">①</span> n8nでGoogleドライブの指定フォルダを監視するトリガーを設定</div>
-            <div class="step-line"><span class="step-arrow">↓</span></div>
-            <div class="step-line"><span class="step-arrow">②</span> ドキュメントの変更を検知 → Gemini APIでベクトル化してDBに保存</div>
-            <div class="step-line"><span class="step-arrow">↓</span></div>
-            <div class="step-line"><span class="step-arrow">③</span> チャット画面から質問 → DBを検索して関連文書を見つけGeminiが回答</div>
+          <div class="how-steps">
+            <div class="how-step"><span class="step-arrow">①</span> n8nのテンプレートを読み込み（5分で設定完了）</div>
+            <div class="how-step"><span class="step-arrow">②</span> Google DriveフォルダとGemini APIを紐付け</div>
+            <div class="how-step"><span class="step-arrow">③</span> ドライブのファイルが更新されると自動でRAGナレッジも更新</div>
+            <div class="how-step"><span class="step-arrow">④</span> チャット画面から加盟店が質問 → 最新マニュアルを元に回答</div>
           </div>
 
           <div class="fc-box">
-            <strong>FC転用イメージ：</strong>本部がGoogleドライブで管理している「オペレーションマニュアル」「クレーム対応フロー」をそのままAI化できる。ファイルを更新するだけでbotの回答も自動で最新化される。
+            <strong>FC転用効果の目安：</strong>「いわさき」noteの事例と同等。Googleドライブに既存資料がある本部はすぐに試せる。マニュアル更新の手間も「ファイルを上書きするだけ」になる。
           </div>
 
-          <div class="source-link">
-            n8nテンプレート（すぐ使える）：<a href="https://n8n.io/workflows/2753-rag-chatbot-for-company-documents-using-google-drive-and-gemini/" target="_blank">RAG chatbot × Google Drive × Gemini</a>
-            ／ <a href="https://dt-solution.com/n8n%E3%81%A7google-drive-pinecone-gpt-4o%E3%82%92%E6%B4%BB%E7%94%A8%E3%81%97%E3%81%9Frag%E3%82%B7%E3%82%B9%E3%83%86%E3%83%A0%E3%81%AE%E6%A7%8B%E7%AF%89/" target="_blank">n8n + Google Drive RAG 日本語解説</a>
+          <div class="src-link">
+            n8nテンプレート：<a href="https://n8n.io/workflows/2753-rag-chatbot-for-company-documents-using-google-drive-and-gemini/" target="_blank">RAG chatbot × Google Drive × Gemini</a>
           </div>
         </div>
       </div>
 
-      <!-- PATTERN 4: Claude API + Apps Script -->
+      <!-- PATTERN 4 -->
       <div class="tool-card t4">
         <div class="tool-header">
           <div>
-            <span class="tool-tag">Pattern 04｜高精度回答</span>
-            <h3>Claude API + Google Apps Script<br>（フォーム自動回答）</h3>
+            <span class="tool-tag">Pattern 04｜マニュアル自動生成</span>
+            <h3>ChatGPT / Claude API<br>SVの「話したこと」をマニュアル化</h3>
           </div>
-          <span class="difficulty-badge">難易度 ★★☆</span>
+          <span class="diff-badge">難易度 ★☆☆ プロンプトのみ</span>
         </div>
         <div class="tool-body">
-          <p>Anthropic社のClaude APIをApps Scriptから呼び出し、Googleフォームで受け付けた加盟店の質問に自動でメール返信する構成。Claude Haikuモデルを使えばコストを最小化しつつ、長い文書を正確に読んで回答する高い精度が得られる。プロンプトキャッシュ機能で同じシステムプロンプトは最大90%コスト削減可能。</p>
+          <p>松屋フーズ・KFCのような高コストなVR研修ではなく、まず「マニュアル自体を作る工数」をAIで削減する。SVへのインタビュー議事録・音声文字起こしをAIに渡すだけでマニュアルが自動生成される。</p>
 
           <div class="tool-meta">
             <div class="tool-meta-item">
@@ -846,36 +923,28 @@
             </div>
             <div class="tool-meta-item">
               <span class="meta-label">月額コスト</span>
-              <span class="meta-value">1,000問/月<br>約500〜1,000円</span>
-            </div>
-            <div class="tool-meta-item">
-              <span class="meta-label">推奨モデル</span>
-              <span class="meta-value">Claude<br>Haiku</span>
+              <span class="meta-value">ChatGPT Plus<br>$20/月〜</span>
             </div>
             <div class="tool-meta-item">
               <span class="meta-label">必要スキル</span>
-              <span class="meta-value">JavaScript<br>基礎</span>
+              <span class="meta-value">プロンプト<br>作成のみ</span>
             </div>
           </div>
 
-          <div class="how-it-works">
-            <div class="step-line"><span class="step-arrow">①</span> Googleフォームを作成（加盟店が質問を送信する窓口）</div>
-            <div class="step-line"><span class="step-arrow">↓</span></div>
-            <div class="step-line"><span class="step-arrow">②</span> Apps Scriptで「フォーム送信時」トリガーを設定</div>
-            <div class="step-line"><span class="step-arrow">↓</span></div>
-            <div class="step-line"><span class="step-arrow">③</span> Claude APIに「FAQ内容 + 質問文」を送り回答を生成</div>
-            <div class="step-line"><span class="step-arrow">↓</span></div>
-            <div class="step-line"><span class="step-arrow">④</span> GmailでAIの回答を自動メール返信（SVの確認後送信も可）</div>
+          <div class="how-steps">
+            <div class="how-step"><span class="step-arrow">①</span> SVへのインタビューや通話を音声録音（Zoom / Notionなど）</div>
+            <div class="how-step"><span class="step-arrow">②</span> 文字起こしをChatGPT / Claudeに貼り付け「マニュアルにして」と指示</div>
+            <div class="how-step"><span class="step-arrow">③</span> 生成されたマニュアルを確認・微修正してGoogleドライブに保存</div>
+            <div class="how-step"><span class="step-arrow">④</span> Pattern①〜③のbotのナレッジとして登録</div>
           </div>
 
           <div class="fc-box">
-            <strong>FC転用イメージ：</strong>加盟店がフォームに質問を入力 → 数分でAIの回答がメールで届く。SVは「AIの回答が間違っていたら修正して送信」というレビュー係になれる。品質を保ちながらSV工数を7割削減できる設計。
+            <strong>FC転用効果の目安：</strong>「NANOHA.ai」noteと同等。数日かかっていたマニュアル作成が2時間で完了。SVの「言語化」コストを先に下げることで、その後のAI化がスムーズになる。
           </div>
 
-          <div class="source-link">
-            料金詳細：<a href="https://cloudpack.jp/column/generative-ai/claude-pricing-guide.html" target="_blank">Claude APIの料金プラン完全ガイド</a>
-            ／ <a href="https://dev.to/ji_ai/building-real-apps-with-the-claude-api-tool-use-rag-and-agent-patterns-explained-kcb" target="_blank">Claude APIで実アプリを作る（英語）</a>
-            ／ <a href="https://docs.anthropic.com/ja/docs/build-with-claude/prompt-caching" target="_blank">プロンプトキャッシュで最大90%削減</a>
+          <div class="src-link">
+            参考：<a href="https://note.com/nanoha_aibiz/n/n7d91be1f1a69" target="_blank">アルバイトマニュアルAIに丸投げしたら2時間で完成（note）</a>
+            ／ <a href="https://note.com/ai_sales/n/nfefdf904cc69" target="_blank">録画から画像付き手順書を自動生成（note）</a>
           </div>
         </div>
       </div>
@@ -895,48 +964,43 @@
       <thead>
         <tr>
           <th>パターン</th>
+          <th>何を解決するか</th>
           <th>構築時間</th>
-          <th>月額コスト目安</th>
-          <th>コード</th>
-          <th>向いているケース</th>
+          <th>月額目安</th>
+          <th>類似する大手事例</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>① Google Workspace + Gemini</td>
-          <td>1〜2時間</td>
-          <td>無料〜数百円</td>
-          <td>少量JS</td>
-          <td>Google環境が整っている。とにかく安く始めたい</td>
+          <td>① Dify + PDF</td>
+          <td>加盟店の「SV電話」を削減</td>
+          <td>1日</td>
+          <td>無料〜$59</td>
+          <td>ファミリーマートのマニュアル検索AI</td>
         </tr>
         <tr>
-          <td>② Dify（ノーコード）</td>
-          <td>1日</td>
-          <td>無料〜$59/月</td>
-          <td>不要</td>
-          <td>PDFマニュアルが大量にある。SVが自分で更新したい</td>
+          <td>② Google Workspace + Gemini</td>
+          <td>FAQ自動回答 + 知識定着</td>
+          <td>1〜2時間</td>
+          <td>無料〜数百円</td>
+          <td>パーソルテンプスタッフの確認電話95%削減</td>
         </tr>
         <tr>
           <td>③ n8n + Google Drive</td>
+          <td>マニュアル更新の自動同期</td>
           <td>半日〜1日</td>
-          <td>無料〜API代</td>
-          <td>ほぼ不要</td>
-          <td>Googleドライブに既存資料がある。自動更新したい</td>
+          <td>ほぼ無料</td>
+          <td>ファミリーマートの音声検索（自動更新版）</td>
         </tr>
         <tr>
-          <td>④ Claude API + Apps Script</td>
+          <td>④ ChatGPT/Claude でマニュアル生成</td>
+          <td>ナレッジの言語化コストを削減</td>
           <td>数時間</td>
-          <td>500〜1,000円/月<br>（1,000問の場合）</td>
-          <td>少量JS</td>
-          <td>回答精度を重視。フォーム→メール返信の流れを作りたい</td>
+          <td>$20/月〜</td>
+          <td>松屋フーズ型の「教育設計」自動化</td>
         </tr>
       </tbody>
     </table>
-
-    <p style="font-size: 13px; color: var(--muted);">
-      ※ API費用はモデルと利用量により変動。Gemini・Claude Haikuは低コストモデル。<br>
-      ※ どのパターンも最初は無料枠で試して手応えを確認してから有料プランへ。
-    </p>
   </div>
 </section>
 
@@ -951,187 +1015,46 @@
       <div class="roadmap-item">
         <div class="roadmap-num">1</div>
         <div class="roadmap-content">
-          <h3>SVや本部のノウハウをスプレッドシートに書き出す</h3>
-          <p>「よく聞かれる質問トップ20」をSVにヒアリングしてGoogleスプレッドシートに入力。これがすべてのAI化の土台になる。</p>
-          <span class="roadmap-tool">使うもの：Google スプレッドシート</span>
-          <div class="roadmap-obstacle">⚠ 障壁：SVが「書く時間がない」「自分のノウハウを全部出したくない」という抵抗感が出ることがある</div>
+          <h3>Pattern④でマニュアルをAI自動生成（Step A）</h3>
+          <p>SVへのインタビューや通話録音をAIに渡して、まず「教えるべき内容」をデータ化する。VR研修より100倍安く、同様の「標準化」効果が出る。</p>
+          <span class="roadmap-tool">ツール：ChatGPT / Claude</span>
+          <div class="roadmap-obstacle">⚠ 障壁：SVが「言語化する必要性」を感じない。まず1つの業務だけで試してみせることが有効</div>
         </div>
       </div>
       <div class="roadmap-item">
         <div class="roadmap-num">2</div>
         <div class="roadmap-content">
-          <h3>DifyかPattern①でまず動くものを作る（PoC）</h3>
-          <p>Step1のシートをDifyにアップロードするかApps Scriptに貼り付けて、1日でチャットbotを動かす。社内デモで「こういうものが作れる」を見せる。</p>
-          <span class="roadmap-tool">使うもの：Dify（推奨） or Google Workspace + Gemini</span>
-          <div class="roadmap-obstacle">⚠ 障壁：最初の回答品質は高くない。「使えない」と判断される前に「ナレッジの量が足りていないから」と説明できる準備が必要</div>
+          <h3>Pattern①でDifyに登録してPoCを動かす（Step B入口）</h3>
+          <p>作ったマニュアルをDifyにアップ→URLを社内でシェア→「実際に使えるか」を1週間で検証する。予算承認前に動くものを見せることが重要。</p>
+          <span class="roadmap-tool">ツール：Dify（無料プラン）</span>
+          <div class="roadmap-obstacle">⚠ 障壁：最初の回答精度は高くない。「ナレッジの量が少ないから」と説明できる準備を</div>
         </div>
       </div>
       <div class="roadmap-item">
         <div class="roadmap-num">3</div>
         <div class="roadmap-content">
-          <h3>マニュアルPDF・FAQ・対応メモを追加してナレッジを充実させる</h3>
-          <p>既存の紙マニュアルをPDF化・Google Docs化して追加する。ナレッジが増えるほど回答精度が上がる。SVにも「追加したい内容があれば送って」と継続的に収集。</p>
-          <span class="roadmap-tool">使うもの：Google Drive + Dify or n8n</span>
-          <div class="roadmap-obstacle">⚠ 障壁：ここが最も工数がかかるフェーズ。既存資料の整備・デジタル化が必要</div>
+          <h3>Googleドライブ資産をPattern③で自動ナレッジ化</h3>
+          <p>既存の紙マニュアル・PDF・議事録をGoogleドライブに集約し、n8nで自動RAG連携。マニュアルを更新するだけでbotの回答が最新になる仕組みを作る。</p>
+          <span class="roadmap-tool">ツール：n8n + Google Drive + Gemini</span>
+          <div class="roadmap-obstacle">⚠ 障壁：既存資料のデジタル化・整理に工数がかかる。スキャン + OCR から始める必要がある場合も</div>
         </div>
       </div>
       <div class="roadmap-item">
         <div class="roadmap-num">4</div>
         <div class="roadmap-content">
-          <h3>加盟店に公開してSVの電話対応を段階的に減らす</h3>
-          <p>Difyの共有URLを加盟店に案内するだけで公開完了。「SVに電話する前にまずbot」の習慣を作る。botで解決できなかった質問はSVが対応し、その内容をナレッジに追加する循環を作る。</p>
-          <span class="roadmap-tool">使うもの：Dify公開URL or 独自ドメイン設定</span>
-          <div class="roadmap-obstacle">⚠ 障壁：加盟店オーナーのITリテラシーがばらつく。「使い方がわからない」という問い合わせが一時的に増える可能性がある</div>
+          <h3>全加盟店に展開してSVを「例外対応」に集中させる</h3>
+          <p>botが定型を担うことで、SVは「botで解決できなかった例外」と「関係構築」に集中できる。ファミリーマートが7,000店で実現したモデルを自社規模で再現する。</p>
+          <span class="roadmap-tool">ツール：Dify公開URL / Google Chat bot</span>
+          <div class="roadmap-obstacle">⚠ 障壁：加盟店オーナーのITリテラシーがばらつく。LINEやGoogleフォーム経由での入口設計が重要</div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-
-<!-- START BOX -->
-<section>
-  <div class="container">
-    <div class="section-label">スモールスタート推奨</div>
-    <h2>まず1日で試す、そこから判断する</h2>
-
-    <div class="start-box">
-      <h3>最初にやること：Difyで1日PoC</h3>
-      <p>大きな投資は不要。まず無料で動くものを作って「本当に使われるか」を検証してから次を考える。</p>
-      <div class="start-steps">
-        <div class="start-step">
-          <span class="s-num">Day 1</span>
-          <span class="s-label">Difyに登録して<br>FAQ 20件を入力<br>botを動かす</span>
-        </div>
-        <div class="start-step">
-          <span class="s-num">Week 1</span>
-          <span class="s-label">社内でデモして<br>フィードバックを<br>もらう</span>
-        </div>
-        <div class="start-step">
-          <span class="s-num">Month 1</span>
-          <span class="s-label">ナレッジを充実させ<br>一部加盟店に<br>試験公開</span>
-        </div>
-        <div class="start-step">
-          <span class="s-num">Month 3+</span>
-          <span class="s-label">効果を測定して<br>全加盟店展開 or<br>カスタム開発へ</span>
-        </div>
-      </div>
-    </div>
-
-    <p style="color: var(--muted); font-size: 13px; margin-top: 8px;">
-      手応えがあればn8nで自動化・Claude APIで高精度化など発展させる。Dify無料枠（200メッセージ/月）はPoCには十分。本番運用になったら月$59の有料プランか、自社サーバーにセルフホストする選択肢もある。
-    </p>
-  </div>
-</section>
-
-
-<!-- REAL CASES FROM X / ZENN / QIITA / NOTE -->
-<section>
-  <div class="container">
-    <div class="section-label">実際の投稿・事例（Zenn / Qiita / note より）</div>
-    <h2>エンジニアたちが実際に作ったもの</h2>
-    <p>「理論じゃなくて本当に動くの？」という疑問に答えるために、実際にエンジニアや企業が投稿した事例を拾ってきた。どれも2024〜2025年の実装記事。</p>
-
-    <!-- 大きいカード：FCに最も近い事例3つ -->
-    <div class="real-cases">
-
-      <div class="real-case">
-        <div><span class="platform-badge qiita">Qiita</span></div>
-        <div class="real-case-body">
-          <h4><a href="https://qiita.com/shivixay_souza/items/718b0e08b848e15d31b1" target="_blank">difyで店舗からの問い合わせに答える社用チャットボット作成</a></h4>
-          <p>本社に電話問い合わせが多発していた多店舗企業が、複数のマニュアルPDFをDifyに読み込ませて社内ナレッジbotを構築。FCの「SV電話問題」とほぼ同じ課題構造。コード不要で構築。</p>
-          <div class="real-case-meta">
-            <span class="real-tag">Dify</span>
-            <span class="real-tag">Gemini</span>
-            <span class="real-tag">RAG</span>
-            <span class="real-tag">多店舗向け</span>
-          </div>
-          <div class="real-result">→ 電話問い合わせを削減。マニュアルPDFをアップするだけで完成</div>
-        </div>
-      </div>
-
-      <div class="real-case">
-        <div><span class="platform-badge note">note</span></div>
-        <div class="real-case-body">
-          <h4><a href="https://note.com/glad_walrus6151/n/n27a50a6d9f6c" target="_blank">社内情報の検索時間を短縮！Difyで作るAIチャットボット開発事例｜アローグループ DX推進部</a></h4>
-          <p>社内情報を探すのに時間がかかる問題をDifyのRAGで解消した実務ベースの事例。DX推進担当者が自社で構築・運用。非エンジニアでも更新可能な設計が特徴。</p>
-          <div class="real-case-meta">
-            <span class="real-tag">Dify</span>
-            <span class="real-tag">RAG</span>
-            <span class="real-tag">中小企業</span>
-            <span class="real-tag">非エンジニア運用</span>
-          </div>
-          <div class="real-result">→ 社内情報の検索時間を大幅短縮。DX担当者が自力で構築</div>
-        </div>
-      </div>
-
-      <div class="real-case">
-        <div><span class="platform-badge note">note</span></div>
-        <div class="real-case-body">
-          <h4><a href="https://note.com/ai_app_pro/n/ne15d426d6b58" target="_blank">カカクコム 年間18,000時間削減！Dify導入の全貌と成功の秘訣</a></h4>
-          <p>食べログ・カカクコムがDifyを全社展開。社内chatbotの利用率27%UP、年間18,000時間の工数削減を達成。大企業での導入事例だが、構成自体はシンプルで中小規模でも転用可能。</p>
-          <div class="real-case-meta">
-            <span class="real-tag">Dify</span>
-            <span class="real-tag">全社展開</span>
-            <span class="real-tag">大規模参考</span>
-          </div>
-          <div class="real-result">→ 利用率27%UP、年間18,000時間削減（アンケートで計測）</div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- 小カードグリッド：その他の参考事例 -->
-    <h3 style="margin: 40px 0 16px; font-size: 14px; color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase;">その他の参考事例</h3>
-    <div class="cases-grid">
-
-      <div class="mini-case">
-        <span class="platform-badge zenn">Zenn</span>
-        <h4><a href="https://zenn.dev/axelspace/articles/342cc27b6a3854" target="_blank">ローカルDify × Slack 社内用語回答Bot｜Axelspace</a></h4>
-        <p>Slack上で社内用語を質問するとスレッドで自動回答。外部APIを使わずに自社サーバーで完結させてセキュリティとコストを両立。Dify + Slack Bolt構成。</p>
-      </div>
-
-      <div class="mini-case">
-        <span class="platform-badge zenn">Zenn</span>
-        <h4><a href="https://zenn.dev/sparkleai_blog/articles/47c90ea1a0f513" target="_blank">社内規程Q&Aチャットボット｜SparkleAI</a></h4>
-        <p>社内規程のPDFをDifyのナレッジに登録してRAG対応のQ&Abot化。引用元の文書名も表示する設計でハルシネーション対策も実装。</p>
-      </div>
-
-      <div class="mini-case">
-        <span class="platform-badge qiita">Qiita</span>
-        <h4><a href="https://qiita.com/Yui_I/items/5bd6eed18e95e90ea0f3" target="_blank">n8n × OpenAI × Google Drive RAGチャットbot</a></h4>
-        <p>Google Driveへのファイルアップロードをトリガーに自動でRAG登録。ワークフローを「DB作成」と「回答」の2本に分けて構成。n8nの画面操作のみで完結。</p>
-      </div>
-
-      <div class="mini-case">
-        <span class="platform-badge qiita">Qiita</span>
-        <h4><a href="https://qiita.com/y_inoue15/items/5e8b6adfd97c451d93c5" target="_blank">n8n × Qdrant × LM Studio ローカルRAGチャットbot</a></h4>
-        <p>API費用ゼロのフルローカル環境でRAGbot構築。Qdrant（ベクトルDB）+ LM Studio（ローカルLLM）をn8nで連携。情報を外に出したくない場合の選択肢。</p>
-      </div>
-
-      <div class="mini-case">
-        <span class="platform-badge zenn">Zenn</span>
-        <h4><a href="https://zenn.dev/ameyo/articles/3481d4814134d0" target="_blank">GAS + Gemini API 社内用AIチャットアプリ</a></h4>
-        <p>「API経由だと学習に使われない」という判断でGemini APIをGAS経由で呼び出す社内チャットアプリを構築。情報漏洩リスクを意識した設計方針。</p>
-      </div>
-
-      <div class="mini-case">
-        <span class="platform-badge qiita">Qiita</span>
-        <h4><a href="https://qiita.com/gas-suke/items/b9165944b432a58bc7a1" target="_blank">GAS × Gemini × LINE Messaging API 相談Bot（実質0円）</a></h4>
-        <p>GASからGemini Pro APIを叩いてLINEで会話できるbotを構築。Gemini APIの無料枠を活用して実質0円で運用。加盟店への展開にLINEを使う場合の参考に。</p>
-      </div>
-
-    </div>
-
-    <p style="font-size: 13px; color: var(--muted); margin-top: 8px;">
-      ※ 上記はいずれも実際にエンジニアや企業担当者がZenn・Qiita・noteに投稿した記事。どれも「動いた」実績のある構成やで。
-    </p>
   </div>
 </section>
 
 
 <footer>
-  FC本部向け AI活用実装ガイド｜Google Workspace / Dify / n8n / Claude API 対応版
+  FC本部向け AI活用実態レポート｜他チェーン事例 + note現場の声 + 実装パターン4選
 </footer>
 
 </body>
